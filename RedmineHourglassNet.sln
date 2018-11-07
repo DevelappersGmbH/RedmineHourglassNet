@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaurusSoftware.RedmineHourglassNet", "TaurusSoftware.RedmineHourglassNet\TaurusSoftware.RedmineHourglassNet.csproj", "{8E881314-36E7-4297-ACFC-399108D5515E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaurusSoftware.RedmineHourglassNet.Tests", "TaurusSoftware.RedmineHourglassNet.Tests\TaurusSoftware.RedmineHourglassNet.Tests.csproj", "{B7F8D254-3C51-4F56-B8CC-3927819D2148}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E881314-36E7-4297-ACFC-399108D5515E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E881314-36E7-4297-ACFC-399108D5515E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E881314-36E7-4297-ACFC-399108D5515E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E881314-36E7-4297-ACFC-399108D5515E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F8D254-3C51-4F56-B8CC-3927819D2148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F8D254-3C51-4F56-B8CC-3927819D2148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F8D254-3C51-4F56-B8CC-3927819D2148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F8D254-3C51-4F56-B8CC-3927819D2148}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {616C390C-AA28-4433-BABE-F37B2D018F5A}
+	EndGlobalSection
+EndGlobal
