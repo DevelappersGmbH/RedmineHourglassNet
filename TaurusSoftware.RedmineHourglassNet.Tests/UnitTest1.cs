@@ -8,7 +8,7 @@ namespace TaurusSoftware.RedmineHourglassNet.Tests
         [Fact]
         public void Test1()
         {
-
+           
         }
     }
 }
