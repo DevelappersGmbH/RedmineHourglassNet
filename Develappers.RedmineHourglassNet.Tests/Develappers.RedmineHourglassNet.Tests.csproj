@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TaurusSoftware.RedmineHourglassNet\TaurusSoftware.RedmineHourglassNet.csproj" />
+    <ProjectReference Include="..\Develappers.RedmineHourglassNet\Develappers.RedmineHourglassNet.csproj" />
   </ItemGroup>
 
 </Project>

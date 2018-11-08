@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TaurusSoftware.RedmineHourglassNet
+namespace Develappers.RedmineHourglassNet
 {
     public class HourglassClient
     {

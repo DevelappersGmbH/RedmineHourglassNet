@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaurusSoftware.RedmineHourglassNet", "TaurusSoftware.RedmineHourglassNet\TaurusSoftware.RedmineHourglassNet.csproj", "{8E881314-36E7-4297-ACFC-399108D5515E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Develappers.RedmineHourglassNet", "Develappers.RedmineHourglassNet\Develappers.RedmineHourglassNet.csproj", "{8E881314-36E7-4297-ACFC-399108D5515E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaurusSoftware.RedmineHourglassNet.Tests", "TaurusSoftware.RedmineHourglassNet.Tests\TaurusSoftware.RedmineHourglassNet.Tests.csproj", "{B7F8D254-3C51-4F56-B8CC-3927819D2148}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Develappers.RedmineHourglassNet.Tests", "Develappers.RedmineHourglassNet.Tests\Develappers.RedmineHourglassNet.Tests.csproj", "{B7F8D254-3C51-4F56-B8CC-3927819D2148}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
