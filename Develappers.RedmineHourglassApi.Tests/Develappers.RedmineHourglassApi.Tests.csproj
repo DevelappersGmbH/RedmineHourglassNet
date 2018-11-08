@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Develappers.RedmineHourglassNet\Develappers.RedmineHourglassNet.csproj" />
+    <ProjectReference Include="..\Develappers.RedmineHourglassApi\Develappers.RedmineHourglassApi.csproj" />
   </ItemGroup>
 
 </Project>
