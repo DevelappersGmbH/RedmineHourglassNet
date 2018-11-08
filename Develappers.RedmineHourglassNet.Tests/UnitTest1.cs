@@ -8,7 +8,8 @@ namespace Develappers.RedmineHourglassNet.Tests
         [Fact]
         public async Task Test1()
         {
-           var client = new HourglassClient("","");
+           var config = Helpers.GetTestConfiguration();
+           var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
            await client.TimeBookingsService.GetBookingsAsync();
         }
     }

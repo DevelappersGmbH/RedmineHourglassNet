@@ -5,22 +5,20 @@ namespace Develappers.RedmineHourglassNet
 {
     public class TimeBookingsService
     {
-        private readonly string _baseUrl;
-        private readonly string _apiKey;
+        private readonly HttpClient _httpClient;
 
-        internal TimeBookingsService(string baseUrl, string apiKey)
+        /// <summary>
+        /// Creates an instance of the service.
+        /// </summary>
+        /// <param name="httpClient">The initialized http client.</param>
+        internal TimeBookingsService(HttpClient httpClient)
         {
-            _baseUrl = baseUrl;
-            _apiKey = apiKey;
+            _httpClient = httpClient;
         }
 
         public async Task GetBookingsAsync()
         {
-            var url = $"{_baseUrl}/hourglass/time_bookings.json?key={_apiKey}";
-            using (var httpClient = new HttpClient())
-            {
-                var response = await httpClient.GetStringAsync(url);
-            }
+                var response = await _httpClient.GetStringAsync("time_bookings.json");
         }
     }
 }
