@@ -1,7 +1,9 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Develappers.RedmineHourglassApi.Types;
+using Newtonsoft.Json;
 
-namespace Develappers.RedmineHourglassNet
+namespace Develappers.RedmineHourglassApi
 {
     public class TimeBookingsService
     {
@@ -16,9 +18,10 @@ namespace Develappers.RedmineHourglassNet
             _httpClient = httpClient;
         }
 
-        public async Task GetBookingsAsync()
+        public async Task<PaginatedResult<TimeBooking>> GetBookingsAsync(int offset = 0, int limit = 25)
         {
-                var response = await _httpClient.GetStringAsync("time_bookings.json");
+            var response = await _httpClient.GetStringAsync($"time_bookings.json?offset={offset}&limit={limit}");
+            return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
         }
     }
 }

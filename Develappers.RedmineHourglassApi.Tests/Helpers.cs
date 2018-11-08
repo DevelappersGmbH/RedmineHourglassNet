@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace Develappers.RedmineHourglassNet.Tests
+namespace Develappers.RedmineHourglassApi.Tests
 {
     public static class Helpers
     {

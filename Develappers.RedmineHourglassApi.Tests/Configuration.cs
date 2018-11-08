@@ -1,4 +1,4 @@
-﻿namespace Develappers.RedmineHourglassNet.Tests
+﻿namespace Develappers.RedmineHourglassApi.Tests
 {
     public class Configuration
     {

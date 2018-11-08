@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Develappers.RedmineHourglassNet.Tests
+namespace Develappers.RedmineHourglassApi.Tests
 {
     public class UnitTest1
     {
@@ -10,7 +10,7 @@ namespace Develappers.RedmineHourglassNet.Tests
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-           await client.TimeBookingsService.GetBookingsAsync();
+           var bookings =  await client.TimeBookingsService.GetBookingsAsync();
         }
     }
 }

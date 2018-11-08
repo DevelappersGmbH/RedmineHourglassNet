@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace Develappers.RedmineHourglassNet
+namespace Develappers.RedmineHourglassApi
 {
     /// <summary>
     /// Central object to access the API.
@@ -41,6 +41,7 @@ namespace Develappers.RedmineHourglassNet
             };
             _httpClient.DefaultRequestHeaders.Add("X-Redmine-API-Key", apiKey);
             _httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
 
             TimeBookingsService = new TimeBookingsService(_httpClient);
         }
