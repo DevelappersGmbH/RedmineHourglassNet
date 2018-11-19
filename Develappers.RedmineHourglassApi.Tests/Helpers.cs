@@ -7,7 +7,7 @@ namespace Develappers.RedmineHourglassApi.Tests
     {
         public static Configuration GetTestConfiguration()
         {
-            return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(@"..\..\..\..\config.json"));
+            return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(@"config.json"));
         }
     }
 }
