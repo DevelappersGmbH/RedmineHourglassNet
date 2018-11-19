@@ -5,7 +5,7 @@ This is an API client to access your Remine Hourglass time trackings (see https:
 ## Status
 
 ![Build status](https://travis-ci.org/DevelappersGmbH/RedmineHourglassNet.svg?branch=master)
-[![NuGet](https://img.shields.io/nuget/dt/DevelappersGmbH.RedmineHourglassNet.svg)](https://www.nuget.org/packages/DevelappersGmbH.RedmineHourglassNet/)
+[![NuGet](https://img.shields.io/nuget/dt/Develappers.RedmineHourglassApi.svg)](https://www.nuget.org/packages/Develappers.RedmineHourglassApi/)
 
 ## Usage
 
