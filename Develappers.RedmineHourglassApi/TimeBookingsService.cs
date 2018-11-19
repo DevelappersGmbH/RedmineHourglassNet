@@ -37,11 +37,10 @@ namespace Develappers.RedmineHourglassApi
             {
                 var response = await _httpClient.GetStringAsync($"time_bookings.json?offset={offset}&limit={limit}");
                 var timeBookings = JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
-                if (timeBookings.Records == null) break;
+                if (timeBookings.Records.Count == 0) break;
                 timeRecords.AddRange(GetBookingsForSpecificMonth(timeBookings.Records, month));
                 UpdateOffset();
-                var a = timeBookings.Records.Last();
-                var b = timeRecords.Last();
+                //TODO: fix checking if no record is on the first page
                 if (timeRecords.Last() == timeBookings.Records.Last()) checkNextPage = true;
             } while (checkNextPage);
 
