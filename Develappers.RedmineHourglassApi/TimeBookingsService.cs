@@ -29,7 +29,7 @@ namespace Develappers.RedmineHourglassApi
             return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
         }
 
-        public async Task<List<TimeBooking>> GetBookingsForSpecificMonthAsync(int month = 0)
+        public async Task<List<TimeBooking>> GetBookingsForSpecificMonthAsync(int month = 0, int year = 0)
         {
             var timeRecords = new List<TimeBooking>();
             var checkNextPage = false;
@@ -38,14 +38,36 @@ namespace Develappers.RedmineHourglassApi
                 var response = await _httpClient.GetStringAsync($"time_bookings.json?offset={offset}&limit={limit}");
                 var timeBookings = JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
                 if (timeBookings.Records.Count == 0) break;
-                timeRecords.AddRange(GetBookingsForSpecificMonth(timeBookings.Records, month));
+                var shouldContinue = CheckDateValidation(month, year, timeBookings.Records.First());
+                if (!shouldContinue) break;
+                timeRecords.AddRange(GetBookingsForSpecificMonth(timeBookings.Records, month, year));
                 UpdateOffset();
-                //TODO: fix checking if no record is on the first page
-                if (timeRecords.Last() == timeBookings.Records.Last()) checkNextPage = true;
+
+                if (timeRecords.Count == 0) checkNextPage = true;
+                else if (timeRecords.Last() == timeBookings.Records.Last()) checkNextPage = true;
+
             } while (checkNextPage);
 
             ResetOffset();
             return timeRecords;
+        }
+
+        private bool CheckDateValidation(int month, int year, TimeBooking firstRecord)
+        {
+            var firstRecordDateTime = firstRecord.Start;
+            if (year < firstRecordDateTime.Year) return false;
+            else if (month < firstRecordDateTime.Month && year == firstRecordDateTime.Year) return false;
+            else return true;
+        }
+
+        public List<TimeBooking> GetBookingsForSpecificMonth(List<TimeBooking> timeRecords, int month, int year=0)
+        {
+            //get current month and year if user did not choose specific month
+            if (month == 0) {
+                month = DateTime.Now.Month; 
+                year = DateTime.Now.Year;
+            }
+            return timeRecords.Where(o => o.Start.Month == month && o.Start.Year == year).ToList();
         }
 
         private void ResetOffset()
@@ -56,12 +78,6 @@ namespace Develappers.RedmineHourglassApi
         private void UpdateOffset()
         {
             offset += 100;
-        }
-
-        public List<TimeBooking> GetBookingsForSpecificMonth(List<TimeBooking> timeRecords, int month)
-        {
-            if (month == 0) month = DateTime.Now.Month; //get current month if user did not choose specific month
-            return timeRecords.Where(o => o.Start.Month == month).ToList();
         }
     }
 }

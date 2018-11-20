@@ -13,7 +13,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var bookingsRecords = await client.TimeBookingsService.GetBookingsForSpecificMonthAsync();
+            var bookingsRecords = await client.TimeBookingsService.GetBookingsForSpecificMonthAsync(10,2018);
         }
     }
 }
