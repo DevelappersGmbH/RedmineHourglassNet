@@ -1,0 +1,10 @@
+diff a/Develappers.RedmineHourglassApi.Tests/Helpers.cs b/Develappers.RedmineHourglassApi.Tests/Helpers.cs	(rejected hunks)
+@@ -7,7 +7,7 @@
+     {
+         public static Configuration GetTestConfiguration()
+         {
+-            return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(@"..\..\..\..\config.json"));
++            return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(@"config.json"));
+         }
+     }
+ }
