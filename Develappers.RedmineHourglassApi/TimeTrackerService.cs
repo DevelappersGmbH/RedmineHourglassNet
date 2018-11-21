@@ -53,7 +53,8 @@ namespace Develappers.RedmineHourglassApi
 
             try
             {
-                var data = JsonConvert.SerializeObject(value, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var request = new TimeTrackerCreateRequest { Options = value };
+                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 var response = await _httpClient.PostStringAsync(new Uri("time_trackers/start.json", UriKind.Relative), data, token);
                 return JsonConvert.DeserializeObject<TimeTracker>(response);
             }
