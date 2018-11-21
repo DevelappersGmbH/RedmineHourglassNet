@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net.Http;
+using System.Net;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
 using Newtonsoft.Json;
@@ -14,10 +14,11 @@ namespace Develappers.RedmineHourglassApi
         /// <summary>
         /// Creates an instance of the service.
         /// </summary>
-        /// <param name="httpClient">The initialized http client.</param>
-        internal TimeBookingsService(HttpClient httpClient)
+        /// <param name="configuration">The configuration.</param>
+        internal TimeBookingsService(Configuration configuration)
         {
-            _httpClient = httpClient;
+            // internal constructor -> configuration is always set and valid
+            _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
 
         public async Task<PaginatedResult<TimeBooking>> GetBookingsAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
@@ -27,8 +28,29 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            var response = await _httpClient.GetStringAsync($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}");
+            
+            var response = await _httpClient.GetStringAsync(new Uri($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
             return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
+        }
+
+        public async Task<TimeBooking> GetBookingById(int id, CancellationToken token = default(CancellationToken))
+        {
+            try
+            {
+
+                var response = await _httpClient.GetStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), token);
+                return JsonConvert.DeserializeObject<TimeBooking>(response);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

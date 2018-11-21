@@ -1,76 +1,47 @@
 ﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
 
 namespace Develappers.RedmineHourglassApi
 {
     /// <summary>
     /// Central object to access the API.
     /// </summary>
-    public class HourglassClient : IDisposable
+    public class HourglassClient
     {
-        private readonly HttpClient _httpClient;
+        public HourglassClient(Configuration configuration)
+        {
+            if (configuration == null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
+            if (string.IsNullOrWhiteSpace(configuration.RedmineUrl))
+            {
+                throw new ArgumentException("invalid base url", nameof(configuration));
+            }
+
+            if (string.IsNullOrWhiteSpace(configuration.ApiKey))
+            {
+                throw new ArgumentException("invalid api key", nameof(configuration));
+            }
+
+            // clone the configuration to ensure afterwards changes don't take any effect
+            var config = configuration.DeepClone();
+            TimeBookingsService = new TimeBookingsService(config);
+        }
+
 
         /// <summary>
         /// Creates a new instance of the client.
         /// </summary>
         /// <param name="baseUrl">The redmine installation url.</param>
         /// <param name="apiKey">The api key.</param>
-        public HourglassClient(string baseUrl, string apiKey)
+        public HourglassClient(string baseUrl, string apiKey) : this(new Configuration(baseUrl, apiKey))
         {
-            if (string.IsNullOrWhiteSpace(baseUrl))
-            {
-                throw new ArgumentException("invalid base url", nameof(baseUrl));
-            }
-
-            if (string.IsNullOrWhiteSpace(apiKey))
-            {
-                throw new ArgumentException("invalid api key", nameof(apiKey));
-            }
-
-            var hourglassUrl = baseUrl;
-            if (!hourglassUrl.EndsWith("/"))
-            {
-                hourglassUrl += "/";
-            }
-            hourglassUrl += "hourglass/";
-
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(hourglassUrl)
-            };
-            _httpClient.DefaultRequestHeaders.Add("X-Redmine-API-Key", apiKey);
-            _httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-
-            TimeBookingsService = new TimeBookingsService(_httpClient);
         }
 
         /// <summary>
         /// The service to access time bookings.
         /// </summary>
         public TimeBookingsService TimeBookingsService { get; }
-
-        #region Dispose-Pattern
-        private void ReleaseUnmanagedResources()
-        {
-            // nothing to release here
-        }
-
-        private void Dispose(bool disposing)
-        {
-            ReleaseUnmanagedResources();
-            if (disposing)
-            {
-                _httpClient?.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }
