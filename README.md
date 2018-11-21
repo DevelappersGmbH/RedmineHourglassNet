@@ -16,9 +16,8 @@ First of all, you need an API Key for your user. To get one, please follow the i
 
 ## Project Status
 
-The REST-API itself contains a whole bunch of functionality. This wrapper is still under development. New functions will be added 
-successively.
+The REST-API itself contains a whole bunch of functionality. This wrapper is still under development. New functions will be added successively.
 
 ## Contribution
 
-As already mentioned, the API is very powerful and it takes some time to implement all of it. Contribution requests are very welcome.
+Bug reports and pull requests are welcome on [GitHub](https://github.com/DevelappersGmbH/RedmineHourglassNet). Please check the [contribution guide](CONTRIBUTING.md).This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to our [code of conduct](CODE_OF_CONDUCT.md).
