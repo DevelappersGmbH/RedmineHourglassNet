@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,6 +37,52 @@ namespace Develappers.RedmineHourglassApi
             var response = await _httpClient.GetStringAsync(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
             return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
         }
+
+        public async Task<TimeTracker> StartAsync(TimeTrackerCreate value, CancellationToken token = default(CancellationToken))
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            try
+            {
+                var data = JsonConvert.SerializeObject(value, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var response = await _httpClient.PostStringAsync(new Uri("time_trackers/start.json", UriKind.Relative), data, token);
+                return JsonConvert.DeserializeObject<TimeTracker>(response);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<TimeLog> StopAsync(int id, CancellationToken token = default(CancellationToken))
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync(new Uri($"time_trackers/{id}/stop.json", UriKind.Relative), token);
+                var result = JsonConvert.DeserializeObject<TimeTrackerResult>(response);
+                return result.TimeLog;
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
         public async Task<TimeTracker> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
         {
