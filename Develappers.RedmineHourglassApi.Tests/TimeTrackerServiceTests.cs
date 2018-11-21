@@ -28,7 +28,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var log = await client.TimeTrackerService.StartAsync(new TimeTrackerCreate
+            var log = await client.TimeTrackerService.StartAsync(new TimeTrackerStartOptions
             {
                 IssueId = 64,
                 Comments = "test 1"

@@ -44,7 +44,7 @@ namespace Develappers.RedmineHourglassApi
         /// <param name="value">The detail data.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The time tracker data.</returns>
-        public async Task<TimeTracker> StartAsync(TimeTrackerCreate value, CancellationToken token = default(CancellationToken))
+        public async Task<TimeTracker> StartAsync(TimeTrackerStartOptions value, CancellationToken token = default(CancellationToken))
         {
             if (value == null)
             {
@@ -81,7 +81,7 @@ namespace Develappers.RedmineHourglassApi
             try
             {
                 var response = await _httpClient.DeleteAsync(new Uri($"time_trackers/{id}/stop.json", UriKind.Relative), token);
-                var result = JsonConvert.DeserializeObject<TimeTrackerResult>(response);
+                var result = JsonConvert.DeserializeObject<TimeTrackerStopResponse>(response);
                 return result.TimeLog;
             }
             catch (WebException wex)
