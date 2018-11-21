@@ -38,6 +38,12 @@ namespace Develappers.RedmineHourglassApi
             return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
         }
 
+        /// <summary>
+        /// Starts a new time tracker. (If there's already a started tracker, this method will throw an exception)
+        /// </summary>
+        /// <param name="value">The detail data.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The time tracker data.</returns>
         public async Task<TimeTracker> StartAsync(TimeTrackerCreate value, CancellationToken token = default(CancellationToken))
         {
             if (value == null)
@@ -63,6 +69,12 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
+        /// <summary>
+        /// Stops a time tracker.
+        /// </summary>
+        /// <param name="id">The tracker id.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The time log data.</returns>
         public async Task<TimeLog> StopAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
@@ -83,7 +95,12 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-
+        /// <summary>
+        /// Find time tracker by ID.
+        /// </summary>
+        /// <param name="id">The time tracker id.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The time tracker data.</returns>
         public async Task<TimeTracker> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
