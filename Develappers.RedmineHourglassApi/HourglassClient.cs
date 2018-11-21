@@ -26,8 +26,9 @@ namespace Develappers.RedmineHourglassApi
 
             // clone the configuration to ensure afterwards changes don't take any effect
             var config = configuration.DeepClone();
-            TimeBookingsService = new TimeBookingsService(config);
-            TimeLogsService = new TimeLogsService(config);
+            TimeBookingService = new TimeBookingService(config);
+            TimeLogService = new TimeLogService(config);
+            TimeTrackerService = new TimeTrackerService(config);
         }
 
 
@@ -43,11 +44,16 @@ namespace Develappers.RedmineHourglassApi
         /// <summary>
         /// The service to access time bookings.
         /// </summary>
-        public TimeBookingsService TimeBookingsService { get; }
+        public TimeBookingService TimeBookingService { get; }
 
         /// <summary>
         /// The service to access time logs.
         /// </summary>
-        public TimeLogsService TimeLogsService { get; }
+        public TimeLogService TimeLogService { get; }
+
+        /// <summary>
+        /// The service to access time logs.
+        /// </summary>
+        public TimeTrackerService TimeTrackerService { get; }
     }
 }

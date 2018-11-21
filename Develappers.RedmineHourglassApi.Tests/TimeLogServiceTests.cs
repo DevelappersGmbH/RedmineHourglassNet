@@ -3,14 +3,14 @@ using Xunit;
 
 namespace Develappers.RedmineHourglassApi.Tests
 {
-    public class TimeBookingsServiceTests
+    public class TimeLogServiceTests
     {
         [Fact]
         public async Task GetBookings()
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-           var bookings =  await client.TimeBookingsService.GetBookingsAsync(new BaseListFilter());
+           var logs =  await client.TimeLogService.GetLogsAsync(new BaseListFilter());
         }
 
         [Fact]
@@ -18,7 +18,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var booking = await client.TimeBookingsService.GetBookingById(184);
+            var log = await client.TimeLogService.GetLogById(18);
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
 using Newtonsoft.Json;
-using System.Threading;
 
 namespace Develappers.RedmineHourglassApi
 {
-    public class TimeBookingService
+    public class TimeTrackerService
     {
         private readonly HttpClient _httpClient;
 
@@ -15,30 +15,30 @@ namespace Develappers.RedmineHourglassApi
         /// Creates an instance of the service.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
-        internal TimeBookingService(Configuration configuration)
+        internal TimeTrackerService(Configuration configuration)
         {
             // internal constructor -> configuration is always set and valid
             _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
 
-        public async Task<PaginatedResult<TimeBooking>> GetBookingsAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeTracker>> GetTrackersAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
         {
             if (filter == null)
             {
                 throw new ArgumentNullException(nameof(filter));
             }
-            
-            var response = await _httpClient.GetStringAsync(new Uri($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
-            return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
+
+            var response = await _httpClient.GetStringAsync(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
+            return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
         }
 
-        public async Task<TimeBooking> GetBookingById(int id, CancellationToken token = default(CancellationToken))
+        public async Task<TimeTracker> GetTrackerById(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
 
-                var response = await _httpClient.GetStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), token);
-                return JsonConvert.DeserializeObject<TimeBooking>(response);
+                var response = await _httpClient.GetStringAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), token);
+                return JsonConvert.DeserializeObject<TimeTracker>(response);
             }
             catch (WebException wex)
                 when (wex.Status == WebExceptionStatus.ProtocolError &&

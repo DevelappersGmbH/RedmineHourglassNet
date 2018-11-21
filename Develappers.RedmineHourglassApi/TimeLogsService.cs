@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Develappers.RedmineHourglassApi
 {
-    public class TimeLogsService
+    public class TimeLogService
     {
         private readonly HttpClient _httpClient;
 
@@ -15,7 +15,7 @@ namespace Develappers.RedmineHourglassApi
         /// Creates an instance of the service.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
-        internal TimeLogsService(Configuration configuration)
+        internal TimeLogService(Configuration configuration)
         {
             // internal constructor -> configuration is always set and valid
             _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
