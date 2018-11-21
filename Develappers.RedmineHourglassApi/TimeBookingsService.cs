@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
@@ -96,14 +97,8 @@ namespace Develappers.RedmineHourglassApi
 
             try
             {
-                await _httpClient.DeleteAsync(new Uri($"time_bookings/{ids}.json", UriKind.Relative), token);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
-            {
-                // if it's not found, it is already deleted
-                return;
+                var queryParams = string.Join("&", ids.Select(x => $"time_bookings[]={x}"));
+                await _httpClient.DeleteAsync(new Uri($"time_bookings/bulk_destroy.json?{queryParams}", UriKind.Relative), token);
             }
             catch
             {
