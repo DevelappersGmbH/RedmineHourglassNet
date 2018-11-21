@@ -6,7 +6,7 @@ namespace Develappers.RedmineHourglassApi.Tests
     public class TimeTrackerServiceTests
     {
         [Fact]
-        public async Task GetBookings()
+        public async Task GetTrackings()
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
@@ -14,7 +14,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         }
 
         [Fact]
-        public async Task GetBookingById()
+        public async Task GetTrackingById()
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
