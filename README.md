@@ -1,6 +1,6 @@
 # Redmine Hourglass .Net Client
 
-This is an API client to access your Remine Hourglass time trackings (see https://github.com/hicknhack-software/redmine_hourglass). It is written as .NET Standard library to be used in .NET Framework projects and .NET Core projects as well. 
+This is an API client to access your Redmine Hourglass time trackings (see https://github.com/hicknhack-software/redmine_hourglass). It is written as .NET Standard library to be used in .NET Framework projects and .NET Core projects as well. 
 
 ## Status
 
