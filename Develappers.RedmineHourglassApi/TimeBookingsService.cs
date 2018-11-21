@@ -21,6 +21,12 @@ namespace Develappers.RedmineHourglassApi
             _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
 
+        /// <summary>
+        /// Lists all visible time bookings
+        /// </summary>
+        /// <param name="filter">The filter options.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The paged list of results.</returns>
         public async Task<PaginatedResult<TimeBooking>> GetBookingsAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
         {
             if (filter == null)

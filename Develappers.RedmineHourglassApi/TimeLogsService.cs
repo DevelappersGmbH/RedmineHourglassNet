@@ -21,6 +21,12 @@ namespace Develappers.RedmineHourglassApi
             _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
 
+        /// <summary>
+        /// Lists all visible time logs
+        /// </summary>
+        /// <param name="filter">The filter options.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The paged list of results.</returns>
         public async Task<PaginatedResult<TimeLog>> GetLogsAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
         {
             if (filter == null)
