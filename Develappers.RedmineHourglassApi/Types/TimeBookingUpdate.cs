@@ -6,19 +6,19 @@ namespace Develappers.RedmineHourglassApi.Types
     public class TimeBookingUpdate
     {
         [JsonProperty("start")]
-        public DateTime Start { get; set; }
+        public DateTime? Start { get; set; }
 
         [JsonProperty("stop")]
-        public DateTime Stop { get; set; }
+        public DateTime? Stop { get; set; }
 
         [JsonProperty("user_id")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         [JsonProperty("project_id")]
-        public int ProjectId { get; set; }
+        public int? ProjectId { get; set; }
 
         [JsonProperty("activity_id")]
-        public int ActivityId { get; set; }
+        public int? ActivityId { get; set; }
 
         [JsonProperty("issue_id")]
         public int? IssueId { get; set; }

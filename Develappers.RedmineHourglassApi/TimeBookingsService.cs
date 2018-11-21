@@ -60,7 +60,7 @@ namespace Develappers.RedmineHourglassApi
         }
 
         
-        internal async Task UpdateByIdAsync(int id, TimeBookingUpdate values, CancellationToken token = default(CancellationToken))
+        public async Task UpdateByIdAsync(int id, TimeBookingUpdate values, CancellationToken token = default(CancellationToken))
         {
             if (values == null)
             {
@@ -69,8 +69,8 @@ namespace Develappers.RedmineHourglassApi
 
             try
             {
-                //TODO: doesn't work by now; it always results in bad request
-                var data = JsonConvert.SerializeObject(values, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
+                var request = new TimeBookingUpdateRequest { Values = values };
+                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
                 var response = await _httpClient.PutStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), data, token);
 
             }
