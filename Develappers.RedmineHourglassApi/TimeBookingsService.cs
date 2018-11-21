@@ -59,6 +59,33 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
+        
+        internal async Task UpdateByIdAsync(int id, TimeBookingUpdate values, CancellationToken token = default(CancellationToken))
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            try
+            {
+                //TODO: doesn't work by now; it always results in bad request
+                var data = JsonConvert.SerializeObject(values, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
+                var response = await _httpClient.PutStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), data, token);
+
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw;
+            }
+            catch
+            {
+                throw;
+            }
+        } 
+
         /// <summary>
         /// Deletes a time booking.
         /// </summary>

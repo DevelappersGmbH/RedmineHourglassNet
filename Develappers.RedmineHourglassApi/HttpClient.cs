@@ -83,5 +83,43 @@ namespace Develappers.RedmineHourglassApi
 
             return result;
         }
+
+        public async Task<string> PutStringAsync(Uri relativeUri, string value, CancellationToken token)
+        {
+            var baseUri = new Uri(_hourglassUrl);
+            var completeUri = new Uri(baseUri, relativeUri);
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(completeUri);
+            httpWebRequest.Method = "PUT";
+            httpWebRequest.Accept = "application/json";
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Headers.Add("X-Redmine-API-Key", _apiKey);
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                var reqStream = httpWebRequest.GetRequestStream();
+                var bytes = Encoding.UTF8.GetBytes(value);
+                await reqStream.WriteAsync(bytes, 0, bytes.Length, token).ConfigureAwait(false);
+                reqStream.Close();
+            }
+
+            string result;
+            using (var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync())
+            {
+                var responseStream = httpResponse.GetResponseStream();
+                if (responseStream == null)
+                {
+                    throw new IOException("response stream was null!");
+                }
+
+
+                using (var streamReader = new StreamReader(responseStream))
+                {
+                    result = await streamReader.ReadToEndAsync();
+                }
+            }
+
+            return result;
+        }
     }
 }
