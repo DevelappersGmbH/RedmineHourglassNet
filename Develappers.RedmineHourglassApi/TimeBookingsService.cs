@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
@@ -27,7 +28,7 @@ namespace Develappers.RedmineHourglassApi
         /// <param name="filter">The filter options.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The paged list of results.</returns>
-        public async Task<PaginatedResult<TimeBooking>> GetBookingsAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeBooking>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
         {
             if (filter == null)
             {
@@ -38,11 +39,10 @@ namespace Develappers.RedmineHourglassApi
             return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
         }
 
-        public async Task<TimeBooking> GetBookingById(int id, CancellationToken token = default(CancellationToken))
+        public async Task<TimeBooking> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
-
                 var response = await _httpClient.GetStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), token);
                 return JsonConvert.DeserializeObject<TimeBooking>(response);
             }
@@ -51,6 +51,59 @@ namespace Develappers.RedmineHourglassApi
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes a time booking.
+        /// </summary>
+        /// <param name="id">The id of the booking.</param>
+        /// <param name="token">The cancellation token.</param>
+        public async Task DeleteByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        {
+            try
+            {
+                await _httpClient.DeleteAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), token);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                // if it's not found, it is already deleted
+                return;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes a time booking.
+        /// </summary>
+        /// <param name="ids">The list of ids to delete.</param>
+        /// <param name="token">The cancellation token.</param>
+        public async Task DeleteMultipleAsync(List<int> ids, CancellationToken token = default(CancellationToken))
+        {
+            if (ids == null)
+            {
+                throw new ArgumentNullException(nameof(ids));
+            }
+
+            try
+            {
+                await _httpClient.DeleteAsync(new Uri($"time_bookings/{ids}.json", UriKind.Relative), token);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                // if it's not found, it is already deleted
+                return;
             }
             catch
             {

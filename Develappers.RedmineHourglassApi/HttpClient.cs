@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,6 +23,36 @@ namespace Develappers.RedmineHourglassApi
 
             _apiKey = apiKey;
         }
+
+        public async Task<string> DeleteAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
+        {
+            var baseUri = new Uri(_hourglassUrl);
+            var completeUri = new Uri(baseUri, relativeUri);
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(completeUri);
+            httpWebRequest.Method = "DELETE";
+            httpWebRequest.Accept = "application/json";
+            httpWebRequest.Headers.Add("X-Redmine-API-Key", _apiKey);
+
+            string result;
+            using (var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync())
+            {
+                var responseStream = httpResponse.GetResponseStream();
+                if (responseStream == null)
+                {
+                    throw new IOException("response stream was null!");
+                }
+
+
+                using (var streamReader = new StreamReader(responseStream))
+                {
+                    result = await streamReader.ReadToEndAsync();
+                }
+            }
+
+            return result;
+        }
+
 
         public async Task<string> GetStringAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
         {

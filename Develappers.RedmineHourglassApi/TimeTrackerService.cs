@@ -27,7 +27,7 @@ namespace Develappers.RedmineHourglassApi
         /// <param name="filter">The filter options.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The paged list of results.</returns>
-        public async Task<PaginatedResult<TimeTracker>> GetTrackersAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeTracker>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
         {
             if (filter == null)
             {
@@ -38,7 +38,7 @@ namespace Develappers.RedmineHourglassApi
             return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
         }
 
-        public async Task<TimeTracker> GetTrackerById(int id, CancellationToken token = default(CancellationToken))
+        public async Task<TimeTracker> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {

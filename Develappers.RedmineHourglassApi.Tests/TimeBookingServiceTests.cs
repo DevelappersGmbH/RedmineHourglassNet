@@ -10,7 +10,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-           var bookings =  await client.TimeBookingService.GetBookingsAsync(new BaseListFilter());
+           var bookings =  await client.TimeBookingService.GetListAsync(new BaseListFilter());
         }
 
         [Fact]
@@ -18,7 +18,16 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var booking = await client.TimeBookingService.GetBookingById(184);
+            var booking = await client.TimeBookingService.GetByIdAsync(2);
         }
+
+        [Fact]
+        public async Task DeleteBookingById()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+            await client.TimeBookingService.DeleteByIdAsync(2);
+        }
+        
     }
 }
