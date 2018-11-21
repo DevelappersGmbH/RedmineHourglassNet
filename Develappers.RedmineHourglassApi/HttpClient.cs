@@ -24,79 +24,47 @@ namespace Develappers.RedmineHourglassApi
             _apiKey = apiKey;
         }
 
-        public async Task<string> DeleteAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
+        public Task<string> DeleteAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
         {
-            var baseUri = new Uri(_hourglassUrl);
-            var completeUri = new Uri(baseUri, relativeUri);
-
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(completeUri);
-            httpWebRequest.Method = "DELETE";
-            httpWebRequest.Accept = "application/json";
-            httpWebRequest.Headers.Add("X-Redmine-API-Key", _apiKey);
-
-            string result;
-            using (var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync())
-            {
-                var responseStream = httpResponse.GetResponseStream();
-                if (responseStream == null)
-                {
-                    throw new IOException("response stream was null!");
-                }
-
-
-                using (var streamReader = new StreamReader(responseStream))
-                {
-                    result = await streamReader.ReadToEndAsync();
-                }
-            }
-
-            return result;
+            return ExecuteRequestInternalAsync("DELETE", relativeUri, null, token);
         }
 
-
-        public async Task<string> GetStringAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
+        public Task<string> GetStringAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
         {
-            var baseUri = new Uri(_hourglassUrl);
-            var completeUri = new Uri(baseUri, relativeUri);
-
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(completeUri);
-            httpWebRequest.Method = "GET";
-            httpWebRequest.Accept = "application/json";
-            httpWebRequest.Headers.Add("X-Redmine-API-Key", _apiKey);
-
-            string result;
-
-            using (var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync())
-            {
-                var responseStream = httpResponse.GetResponseStream();
-                if (responseStream == null)
-                {
-                    throw new IOException("response stream was null!");
-                }
-
-
-                using (var streamReader = new StreamReader(responseStream))
-                {
-                    result = await streamReader.ReadToEndAsync();
-                }
-            }
-
-            return result;
+            return ExecuteRequestInternalAsync("GET", relativeUri, null, token);
         }
 
-        public async Task<string> PutStringAsync(Uri relativeUri, string value, CancellationToken token)
+        private async Task<string> ExecuteRequestInternalAsync(string method, Uri relativeUri, string value, CancellationToken token)
         {
+            if (string.IsNullOrEmpty(method))
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            if (method != "GET" && method != "PUT" && method != "POST" && method != "DELETE")
+            {
+                throw new ArgumentException("invalid request method", nameof(method));
+            }
+
+            if (relativeUri == null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
             var baseUri = new Uri(_hourglassUrl);
             var completeUri = new Uri(baseUri, relativeUri);
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(completeUri);
-            httpWebRequest.Method = "PUT";
+            httpWebRequest.Method = method;
             httpWebRequest.Accept = "application/json";
-            httpWebRequest.ContentType = "application/json";
+            
             httpWebRequest.Headers.Add("X-Redmine-API-Key", _apiKey);
 
             if (!string.IsNullOrEmpty(value))
             {
+                // we always use json
+                httpWebRequest.ContentType = "application/json";
+
                 var reqStream = httpWebRequest.GetRequestStream();
                 var bytes = Encoding.UTF8.GetBytes(value);
                 await reqStream.WriteAsync(bytes, 0, bytes.Length, token).ConfigureAwait(false);
@@ -112,7 +80,6 @@ namespace Develappers.RedmineHourglassApi
                     throw new IOException("response stream was null!");
                 }
 
-
                 using (var streamReader = new StreamReader(responseStream))
                 {
                     result = await streamReader.ReadToEndAsync();
@@ -120,6 +87,16 @@ namespace Develappers.RedmineHourglassApi
             }
 
             return result;
+        }
+
+        public Task<string> PutStringAsync(Uri relativeUri, string value, CancellationToken token)
+        {
+            return ExecuteRequestInternalAsync("PUT", relativeUri, value, token);
+        }
+
+        public Task<string> PostStringAsync(Uri relativeUri, string value, CancellationToken token)
+        {
+            return ExecuteRequestInternalAsync("POST", relativeUri, value, token);
         }
     }
 }
