@@ -16,7 +16,7 @@ First of all, you need an API Key for your user. To get one, please follow the i
 
 ## Project Status
 
-The REST-API itself contains a whole bunch of functionality. This wrapper is still under development. New functions will be added successively. You can find detailed information about recent changes in [CHANGELOG.md](CHANGELOG.md).
+The REST-API itself contains a whole bunch of functionality. This wrapper is still under development. New functions will be added successively. You can find detailed information about recent changes in [change log](CHANGELOG.md).
 
 ## Contribution
 
