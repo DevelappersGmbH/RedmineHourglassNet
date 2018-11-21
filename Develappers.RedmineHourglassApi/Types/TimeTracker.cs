@@ -14,6 +14,12 @@ namespace Develappers.RedmineHourglassApi.Types
         [JsonProperty("user_id")]
         public int UserId { get; set; }
 
+        [JsonProperty("project_id")]
+        public int? ProjectId { get; set; }
+
+        [JsonProperty("activity_id")]
+        public int? ActivityId { get; set; }
+
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
 
