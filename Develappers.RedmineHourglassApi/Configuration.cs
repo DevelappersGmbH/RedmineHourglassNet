@@ -25,10 +25,5 @@ namespace Develappers.RedmineHourglassApi
         /// The api key.
         /// </summary>
         public string ApiKey { get; set; }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
