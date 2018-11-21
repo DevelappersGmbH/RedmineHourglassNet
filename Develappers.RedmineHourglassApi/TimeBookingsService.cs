@@ -84,7 +84,7 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <summary>
-        /// Deletes a time booking.
+        /// Deletes multiple time bookings at once.
         /// </summary>
         /// <param name="ids">The list of ids to delete.</param>
         /// <param name="token">The cancellation token.</param>
@@ -93,6 +93,12 @@ namespace Develappers.RedmineHourglassApi
             if (ids == null)
             {
                 throw new ArgumentNullException(nameof(ids));
+            }
+
+            if (ids.Count == 0)
+            {
+                // no item to delete
+                return;
             }
 
             try
