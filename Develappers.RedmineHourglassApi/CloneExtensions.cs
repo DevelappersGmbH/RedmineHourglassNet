@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Develappers.RedmineHourglassApi
 {
-    public static class CloneExtensions
+    internal static class CloneExtensions
     {
         /// <summary>
         /// Creates a deep clone of an object.

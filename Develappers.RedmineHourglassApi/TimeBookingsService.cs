@@ -27,7 +27,6 @@ namespace Develappers.RedmineHourglassApi
             {
                 throw new ArgumentNullException(nameof(filter));
             }
-
             
             var response = await _httpClient.GetStringAsync(new Uri($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
             return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
