@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Develappers.RedmineHourglassApi.Logging;
 using Develappers.RedmineHourglassApi.Types;
 using Newtonsoft.Json;
 
@@ -34,8 +35,17 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            var response = await _httpClient.GetStringAsync(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
-            return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
+            try
+            {
+                var response = await _httpClient.GetStringAsync(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
+                return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -58,8 +68,9 @@ namespace Develappers.RedmineHourglassApi
                 var response = await _httpClient.PostStringAsync(new Uri("time_trackers/start.json", UriKind.Relative), data, token);
                 return JsonConvert.DeserializeObject<TimeTracker>(response);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
@@ -84,8 +95,9 @@ namespace Develappers.RedmineHourglassApi
             {
                 throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
@@ -110,8 +122,9 @@ namespace Develappers.RedmineHourglassApi
             {
                 throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
@@ -133,8 +146,9 @@ namespace Develappers.RedmineHourglassApi
             {
                 throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
@@ -166,8 +180,9 @@ namespace Develappers.RedmineHourglassApi
             {
                 throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }

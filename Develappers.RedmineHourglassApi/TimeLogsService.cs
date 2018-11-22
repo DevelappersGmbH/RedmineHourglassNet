@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Develappers.RedmineHourglassApi.Logging;
 using Develappers.RedmineHourglassApi.Types;
 using Newtonsoft.Json;
 
@@ -34,8 +35,16 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            var response = await _httpClient.GetStringAsync(new Uri($"time_logs.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
-            return JsonConvert.DeserializeObject<PaginatedResult<TimeLog>>(response);
+            try
+            {
+                var response = await _httpClient.GetStringAsync(new Uri($"time_logs.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
+                return JsonConvert.DeserializeObject<PaginatedResult<TimeLog>>(response);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
         }
 
         public async Task<TimeLog> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
@@ -52,8 +61,9 @@ namespace Develappers.RedmineHourglassApi
             {
                 throw new NotFoundException($"time log with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }

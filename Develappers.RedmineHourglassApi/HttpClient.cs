@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Develappers.RedmineHourglassApi.Logging;
 
 namespace Develappers.RedmineHourglassApi
 {
@@ -28,21 +29,25 @@ namespace Develappers.RedmineHourglassApi
         {
             if (string.IsNullOrEmpty(method))
             {
+                LogProvider.GetCurrentClassLogger().Error($"{nameof(ExecuteRequestInternalAsync)} called with invalid method");
                 throw new ArgumentNullException(nameof(method));
             }
 
             if (method != "GET" && method != "PUT" && method != "POST" && method != "DELETE")
             {
+                LogProvider.GetCurrentClassLogger().Error($"{nameof(ExecuteRequestInternalAsync)} called with unsupported method");
                 throw new ArgumentException("invalid request method", nameof(method));
             }
 
             if (relativeUri == null)
             {
-                throw new ArgumentNullException(nameof(method));
+                throw new ArgumentNullException(nameof(relativeUri));
             }
 
             var baseUri = new Uri(_hourglassUrl);
             var completeUri = new Uri(baseUri, relativeUri);
+
+            LogProvider.GetCurrentClassLogger().Debug($"executing {method} request to {completeUri} with body '{value}'" );
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(completeUri);
             httpWebRequest.Method = method;
@@ -76,6 +81,7 @@ namespace Develappers.RedmineHourglassApi
                 }
             }
 
+            LogProvider.GetCurrentClassLogger().Debug($"retrieved result '{result}'");
             return result;
         }
 
