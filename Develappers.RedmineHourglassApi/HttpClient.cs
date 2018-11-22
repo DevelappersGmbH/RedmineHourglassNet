@@ -24,16 +24,6 @@ namespace Develappers.RedmineHourglassApi
             _apiKey = apiKey;
         }
 
-        public Task<string> DeleteAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
-        {
-            return ExecuteRequestInternalAsync("DELETE", relativeUri, null, token);
-        }
-
-        public Task<string> GetStringAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
-        {
-            return ExecuteRequestInternalAsync("GET", relativeUri, null, token);
-        }
-
         private async Task<string> ExecuteRequestInternalAsync(string method, Uri relativeUri, string value, CancellationToken token)
         {
             if (string.IsNullOrEmpty(method))
@@ -89,6 +79,11 @@ namespace Develappers.RedmineHourglassApi
             return result;
         }
 
+        public Task<string> GetStringAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
+        {
+            return ExecuteRequestInternalAsync("GET", relativeUri, null, token);
+        }
+
         public Task<string> PutStringAsync(Uri relativeUri, string value, CancellationToken token)
         {
             return ExecuteRequestInternalAsync("PUT", relativeUri, value, token);
@@ -97,6 +92,11 @@ namespace Develappers.RedmineHourglassApi
         public Task<string> PostStringAsync(Uri relativeUri, string value, CancellationToken token)
         {
             return ExecuteRequestInternalAsync("POST", relativeUri, value, token);
+        }
+
+        public Task<string> DeleteAsync(Uri relativeUri, CancellationToken token = default(CancellationToken))
+        {
+            return ExecuteRequestInternalAsync("DELETE", relativeUri, null, token);
         }
     }
 }
