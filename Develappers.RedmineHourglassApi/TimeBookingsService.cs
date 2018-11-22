@@ -59,7 +59,13 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        
+        /// <summary>
+        /// Updates a time booking with the given values. Omitting values will keep the old values.
+        /// </summary>
+        /// <param name="id">The id of the time booking.</param>
+        /// <param name="values">The new values.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns></returns>
         public async Task UpdateByIdAsync(int id, TimeBookingUpdate values, CancellationToken token = default(CancellationToken))
         {
             if (values == null)
@@ -78,7 +84,7 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                throw;
+                throw new NotFoundException($"time booking with id {id} not found", wex);
             }
             catch
             {

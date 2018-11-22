@@ -53,7 +53,7 @@ namespace Develappers.RedmineHourglassApi
 
             try
             {
-                var request = new TimeTrackerCreateRequest { Options = value };
+                var request = new TimeTrackerStartRequest { Values = value };
                 var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 var response = await _httpClient.PostStringAsync(new Uri("time_trackers/start.json", UriKind.Relative), data, token);
                 return JsonConvert.DeserializeObject<TimeTracker>(response);
@@ -126,6 +126,39 @@ namespace Develappers.RedmineHourglassApi
             try
             {
                 await _httpClient.DeleteAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), token);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException($"time tracker with id {id} not found", wex);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates a time tracker with the given values. Omitting values will keep the old values.
+        /// </summary>
+        /// <param name="id">The id of the time tracker.</param>
+        /// <param name="values">The new values.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task UpdateByIdAsync(int id, TimeTrackerUpdate values, CancellationToken token = default(CancellationToken))
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            try
+            {
+                var request = new TimeTrackerUpdateRequest { Values = values };
+                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var response = await _httpClient.PutStringAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), data, token);
+
             }
             catch (WebException wex)
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
