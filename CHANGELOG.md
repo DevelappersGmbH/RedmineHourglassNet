@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Contribution guidelines, code of conduct and changelog
 - time trackers: start, stop, delete
 - time bookings: Update
+- support for logging frameworks
 
 ### Changed
 - GetById throws NotFoundException instead of returning null when item was not found 
