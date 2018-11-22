@@ -58,12 +58,6 @@ namespace Develappers.RedmineHourglassApi
                 var response = await _httpClient.PostStringAsync(new Uri("time_trackers/start.json", UriKind.Relative), data, token);
                 return JsonConvert.DeserializeObject<TimeTracker>(response);
             }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException();
-            }
             catch
             {
                 throw;
@@ -88,7 +82,7 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
             catch
             {
@@ -114,7 +108,30 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"time tracker with id {id} not found", wex);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes a time tracker.
+        /// </summary>
+        /// <param name="id">The id of the tracker.</param>
+        /// <param name="token">The cancellation token.</param>
+        public async Task DeleteByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        {
+            try
+            {
+                await _httpClient.DeleteAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), token);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
             catch
             {

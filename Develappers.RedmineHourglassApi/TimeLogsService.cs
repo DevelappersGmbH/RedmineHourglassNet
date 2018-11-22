@@ -50,7 +50,7 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"time log with id {id} not found", wex);
             }
             catch
             {

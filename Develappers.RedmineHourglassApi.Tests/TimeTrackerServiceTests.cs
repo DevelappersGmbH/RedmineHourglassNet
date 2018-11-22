@@ -42,5 +42,13 @@ namespace Develappers.RedmineHourglassApi.Tests
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
             var log = await client.TimeTrackerService.StopAsync(6);
         }
+
+        [Fact]
+        public async Task Delete()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+            await client.TimeTrackerService.DeleteByIdAsync(13);
+        }
     }
 }

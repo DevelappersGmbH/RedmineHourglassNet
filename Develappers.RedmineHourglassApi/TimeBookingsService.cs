@@ -101,8 +101,7 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                // if it's not found, it is already deleted
-                return;
+                throw new NotFoundException($"time booking with id {id} not found", wex);
             }
             catch
             {
