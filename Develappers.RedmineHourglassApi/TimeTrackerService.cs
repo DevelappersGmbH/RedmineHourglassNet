@@ -160,6 +160,33 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
+        public async Task BulkUpdateAsync(List<TimeTrackerBulkUpdate> values, CancellationToken token = default(CancellationToken))
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            try
+            {
+                var dict = new Dictionary<string, TimeTrackerBulkUpdate>();
+                for (var i = 0; i < values.Count; i++)
+                {
+                    dict.Add($"additionalProp{i + 1}", values[i]);
+                }
+                var request = new TimeTrackerBulkUpdateRequest { Values = dict };
+                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                await _httpClient.PostStringAsync(new Uri("time_trackers/bulk_update.json", UriKind.Relative), data, token);
+
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
         public async Task BulkDeleteAsync(List<int> ids, CancellationToken token = default(CancellationToken))
         {
             if (ids == null)
