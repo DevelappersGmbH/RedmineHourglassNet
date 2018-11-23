@@ -12,7 +12,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config);
-           var bookings =  await client.TimeBookingService.GetListAsync(new BaseListFilter());
+           var bookings =  await client.TimeBookings.GetListAsync(new BaseListFilter());
         }
 
         [Fact]
@@ -20,7 +20,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            var booking = await client.TimeBookingService.GetAsync(2);
+            var booking = await client.TimeBookings.GetAsync(2);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeBookingService.DeleteAsync(2);
+            await client.TimeBookings.DeleteAsync(2);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeBookingService.BulkDeleteAsync(new List<int>{3,4});
+            await client.TimeBookings.BulkDeleteAsync(new List<int>{3,4});
         }
 
         [Fact]
@@ -44,8 +44,8 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            var booking = await client.TimeBookingService.GetAsync(5);
-            await client.TimeBookingService.UpdateAsync(5, new TimeBookingUpdate
+            var booking = await client.TimeBookings.GetAsync(5);
+            await client.TimeBookings.UpdateAsync(5, new TimeBookingUpdate
             {
                 //Start = booking.Start,
                 //Stop = booking.Stop,

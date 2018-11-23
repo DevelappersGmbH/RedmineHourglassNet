@@ -10,6 +10,7 @@ namespace Develappers.RedmineHourglassApi
 {
     public class TimeTrackerService
     {
+        private readonly Configuration _configuration;
         private readonly HttpClient _httpClient;
 
         /// <summary>
@@ -18,6 +19,7 @@ namespace Develappers.RedmineHourglassApi
         /// <param name="configuration">The configuration.</param>
         internal TimeTrackerService(Configuration configuration)
         {
+            _configuration = configuration;
             // internal constructor -> configuration is always set and valid
             _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
