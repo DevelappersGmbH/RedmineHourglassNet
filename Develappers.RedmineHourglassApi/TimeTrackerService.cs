@@ -108,7 +108,7 @@ namespace Develappers.RedmineHourglassApi
         /// <param name="id">The id of the time tracker.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The time tracker.</returns>
-        public async Task<TimeTracker> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        public async Task<TimeTracker> GetAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
@@ -134,7 +134,7 @@ namespace Develappers.RedmineHourglassApi
         /// </summary>
         /// <param name="id">The id of the tracker.</param>
         /// <param name="token">The cancellation token.</param>
-        public async Task DeleteByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
@@ -160,7 +160,7 @@ namespace Develappers.RedmineHourglassApi
         /// <param name="values">The new values.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns></returns>
-        public async Task UpdateByIdAsync(int id, TimeTrackerUpdate values, CancellationToken token = default(CancellationToken))
+        public async Task UpdateAsync(int id, TimeTrackerUpdate values, CancellationToken token = default(CancellationToken))
         {
             if (values == null)
             {

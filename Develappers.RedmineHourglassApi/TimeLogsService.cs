@@ -53,7 +53,7 @@ namespace Develappers.RedmineHourglassApi
         /// <param name="id">The id of the time log.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The time log.</returns>
-        public async Task<TimeLog> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        public async Task<TimeLog> GetAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Develappers.RedmineHourglassApi
         /// </summary>
         /// <param name="id">The id of the log.</param>
         /// <param name="token">The cancellation token.</param>
-        public async Task DeleteByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
@@ -99,13 +99,13 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <summary>
-        /// books a time log.
+        /// Books a time log.
         /// </summary>
         /// <param name="id">The id of the log.</param>
         /// <param name="value">The detail data.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The time tracker data.</returns>
-        public async Task<TimeEntry> BookByIdAsync(int id, TimeBookingUpdate value, CancellationToken token = default(CancellationToken))
+        public async Task<TimeEntry> BookAsync(int id, TimeBookingUpdate value, CancellationToken token = default(CancellationToken))
         {
             if (value == null)
             {

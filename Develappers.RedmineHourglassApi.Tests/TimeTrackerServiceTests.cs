@@ -19,7 +19,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var log = await client.TimeTrackerService.GetByIdAsync(105);
+            var log = await client.TimeTrackerService.GetAsync(105);
         }
 
 
@@ -48,7 +48,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            await client.TimeTrackerService.DeleteByIdAsync(13);
+            await client.TimeTrackerService.DeleteAsync(13);
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            await client.TimeTrackerService.UpdateByIdAsync(14, new TimeTrackerUpdate
+            await client.TimeTrackerService.UpdateAsync(14, new TimeTrackerUpdate
             {
                 Comments = "bla1"
             });

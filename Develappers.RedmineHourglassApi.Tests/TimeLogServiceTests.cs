@@ -19,7 +19,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var log = await client.TimeLogService.GetByIdAsync(18);
+            var log = await client.TimeLogService.GetAsync(18);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            await client.TimeLogService.DeleteByIdAsync(18);
+            await client.TimeLogService.DeleteAsync(18);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            await client.TimeLogService.BookByIdAsync(18, new TimeBookingUpdate()
+            await client.TimeLogService.BookAsync(18, new TimeBookingUpdate()
             {
                 Comments = "blubb"
             });

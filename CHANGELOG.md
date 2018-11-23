@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - support for logging frameworks
 
 ### Changed
-- GetById throws NotFoundException instead of returning null when item was not found 
+- renamed all service functions because "ById" is implicit clear
+- Get throws NotFoundException instead of returning null when item was not found 
 
 ### Removed
 - nothing
