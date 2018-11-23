@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- nothing
+
+### Changed
+- nothing
+
+### Removed
+- nothing
+
+### Fixed
+- nothing
+
+## [0.3.0] - 2018-11-23
+### Added
 - time trackers: implemented bulk operations
 - time bookings: implemented bulk operations
 - time logs: implemented bulk operations
