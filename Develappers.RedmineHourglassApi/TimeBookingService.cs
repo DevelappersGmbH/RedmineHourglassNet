@@ -138,5 +138,32 @@ namespace Develappers.RedmineHourglassApi
                 throw;
             }
         }
+
+        /// <inheritdoc />
+        public async Task BulkUpdateAsync(List<TimeBookingBulkUpdate> values, CancellationToken token = default(CancellationToken))
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            try
+            {
+                var dict = new Dictionary<string, TimeBookingBulkUpdate>();
+                for (var i = 0; i < values.Count; i++)
+                {
+                    dict.Add($"additionalProp{i + 1}", values[i]);
+                }
+                var request = new TimeBookingBulkUpdateRequest { Values = dict };
+                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                await _httpClient.PostStringAsync(new Uri("time_bookings/bulk_update.json", UriKind.Relative), data, token);
+
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
     }
 }

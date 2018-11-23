@@ -45,5 +45,13 @@ namespace Develappers.RedmineHourglassApi
         /// <param name="ids">The list of ids to delete.</param>
         /// <param name="token">The cancellation token.</param>
         Task BulkDeleteAsync(List<int> ids, CancellationToken token = default(CancellationToken));
+
+        /// <summary>
+        /// Updates multiple time bookings at once
+        /// </summary>
+        /// <param name="values">The items to update.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns></returns>
+        Task BulkUpdateAsync(List<TimeBookingBulkUpdate> values, CancellationToken token = default(CancellationToken));
     }
 }
