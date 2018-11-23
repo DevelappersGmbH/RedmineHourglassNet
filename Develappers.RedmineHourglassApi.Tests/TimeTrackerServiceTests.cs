@@ -10,7 +10,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         public async Task GetTrackings()
         {
            var config = Helpers.GetTestConfiguration();
-           var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+           var client = new HourglassClient(config);
            var logs =  await client.TimeTrackerService.GetListAsync(new BaseListFilter());
         }
 
@@ -18,8 +18,8 @@ namespace Develappers.RedmineHourglassApi.Tests
         public async Task GetTrackingById()
         {
             var config = Helpers.GetTestConfiguration();
-            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var log = await client.TimeTrackerService.GetByIdAsync(105);
+            var client = new HourglassClient(config);
+            var log = await client.TimeTrackerService.GetAsync(105);
         }
 
 
@@ -27,7 +27,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         public async Task Start()
         {
             var config = Helpers.GetTestConfiguration();
-            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+            var client = new HourglassClient(config);
             var log = await client.TimeTrackerService.StartAsync(new TimeTrackerStartOptions
             {
                 IssueId = 64,
@@ -39,8 +39,27 @@ namespace Develappers.RedmineHourglassApi.Tests
         public async Task Stop()
         {
             var config = Helpers.GetTestConfiguration();
-            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+            var client = new HourglassClient(config);
             var log = await client.TimeTrackerService.StopAsync(6);
+        }
+
+        [Fact]
+        public async Task Delete()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeTrackerService.DeleteAsync(13);
+        }
+
+        [Fact]
+        public async Task Update()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeTrackerService.UpdateAsync(14, new TimeTrackerUpdate
+            {
+                Comments = "bla1"
+            });
         }
     }
 }

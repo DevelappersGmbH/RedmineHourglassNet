@@ -11,7 +11,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         public async Task GetBookings()
         {
            var config = Helpers.GetTestConfiguration();
-           var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+           var client = new HourglassClient(config);
            var bookings =  await client.TimeBookingService.GetListAsync(new BaseListFilter());
         }
 
@@ -19,33 +19,33 @@ namespace Develappers.RedmineHourglassApi.Tests
         public async Task GetBookingById()
         {
             var config = Helpers.GetTestConfiguration();
-            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var booking = await client.TimeBookingService.GetByIdAsync(2);
+            var client = new HourglassClient(config);
+            var booking = await client.TimeBookingService.GetAsync(2);
         }
 
         [Fact]
         public async Task DeleteBookingById()
         {
             var config = Helpers.GetTestConfiguration();
-            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            await client.TimeBookingService.DeleteByIdAsync(2);
+            var client = new HourglassClient(config);
+            await client.TimeBookingService.DeleteAsync(2);
         }
 
         [Fact]
         public async Task BulkDeleteBookings()
         {
             var config = Helpers.GetTestConfiguration();
-            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            await client.TimeBookingService.DeleteMultipleAsync(new List<int>{3,4});
+            var client = new HourglassClient(config);
+            await client.TimeBookingService.BulkDeleteAsync(new List<int>{3,4});
         }
 
         [Fact]
         public async Task UpdateBookingById()
         {
             var config = Helpers.GetTestConfiguration();
-            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
-            var booking = await client.TimeBookingService.GetByIdAsync(5);
-            await client.TimeBookingService.UpdateByIdAsync(5, new TimeBookingUpdate
+            var client = new HourglassClient(config);
+            var booking = await client.TimeBookingService.GetAsync(5);
+            await client.TimeBookingService.UpdateAsync(5, new TimeBookingUpdate
             {
                 //Start = booking.Start,
                 //Stop = booking.Stop,

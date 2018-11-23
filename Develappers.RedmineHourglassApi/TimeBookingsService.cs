@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
 using Newtonsoft.Json;
 using System.Threading;
+using Develappers.RedmineHourglassApi.Logging;
 
 namespace Develappers.RedmineHourglassApi
 {
@@ -35,12 +36,26 @@ namespace Develappers.RedmineHourglassApi
             {
                 throw new ArgumentNullException(nameof(filter));
             }
-            
-            var response = await _httpClient.GetStringAsync(new Uri($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
-            return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
+
+            try
+            {
+                var response = await _httpClient.GetStringAsync(new Uri($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
+                return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
         }
 
-        public async Task<TimeBooking> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        /// <summary>
+        /// Retrieves a time booking by it's id.
+        /// </summary>
+        /// <param name="id">The id of the time booking.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The time booking.</returns>
+        public async Task<TimeBooking> GetAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
@@ -51,16 +66,23 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"time booking with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
 
-        
-        public async Task UpdateByIdAsync(int id, TimeBookingUpdate values, CancellationToken token = default(CancellationToken))
+        /// <summary>
+        /// Updates a time booking with the given values. Omitting values will keep the old values.
+        /// </summary>
+        /// <param name="id">The id of the time booking.</param>
+        /// <param name="values">The new values.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task UpdateAsync(int id, TimeBookingUpdate values, CancellationToken token = default(CancellationToken))
         {
             if (values == null)
             {
@@ -71,17 +93,18 @@ namespace Develappers.RedmineHourglassApi
             {
                 var request = new TimeBookingUpdateRequest { Values = values };
                 var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
-                var response = await _httpClient.PutStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), data, token);
+                await _httpClient.PutStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), data, token);
 
             }
             catch (WebException wex)
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                throw;
+                throw new NotFoundException($"time booking with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         } 
@@ -91,7 +114,7 @@ namespace Develappers.RedmineHourglassApi
         /// </summary>
         /// <param name="id">The id of the booking.</param>
         /// <param name="token">The cancellation token.</param>
-        public async Task DeleteByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
@@ -101,11 +124,11 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                // if it's not found, it is already deleted
-                return;
+                throw new NotFoundException($"time booking with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
@@ -115,7 +138,7 @@ namespace Develappers.RedmineHourglassApi
         /// </summary>
         /// <param name="ids">The list of ids to delete.</param>
         /// <param name="token">The cancellation token.</param>
-        public async Task DeleteMultipleAsync(List<int> ids, CancellationToken token = default(CancellationToken))
+        public async Task BulkDeleteAsync(List<int> ids, CancellationToken token = default(CancellationToken))
         {
             if (ids == null)
             {
@@ -133,8 +156,9 @@ namespace Develappers.RedmineHourglassApi
                 var queryParams = string.Join("&", ids.Select(x => $"time_bookings[]={x}"));
                 await _httpClient.DeleteAsync(new Uri($"time_bookings/bulk_destroy.json?{queryParams}", UriKind.Relative), token);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }

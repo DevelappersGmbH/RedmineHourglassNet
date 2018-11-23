@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Develappers.RedmineHourglassApi.Logging;
 using Develappers.RedmineHourglassApi.Types;
 using Newtonsoft.Json;
 
@@ -34,8 +35,17 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            var response = await _httpClient.GetStringAsync(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
-            return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
+            try
+            {
+                var response = await _httpClient.GetStringAsync(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
+                return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -53,19 +63,14 @@ namespace Develappers.RedmineHourglassApi
 
             try
             {
-                var request = new TimeTrackerCreateRequest { Options = value };
+                var request = new TimeTrackerStartRequest { Values = value };
                 var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 var response = await _httpClient.PostStringAsync(new Uri("time_trackers/start.json", UriKind.Relative), data, token);
                 return JsonConvert.DeserializeObject<TimeTracker>(response);
             }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            catch (Exception ex)
             {
-                throw new NotFoundException();
-            }
-            catch
-            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
@@ -88,21 +93,22 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
 
         /// <summary>
-        /// Find time tracker by ID.
+        /// Retrieves a time tracker by it's id.
         /// </summary>
-        /// <param name="id">The time tracker id.</param>
+        /// <param name="id">The id of the time tracker.</param>
         /// <param name="token">The cancellation token.</param>
-        /// <returns>The time tracker data.</returns>
-        public async Task<TimeTracker> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        /// <returns>The time tracker.</returns>
+        public async Task<TimeTracker> GetAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
             {
@@ -114,10 +120,69 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
-            catch
+            catch (Exception ex)
             {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes a time tracker.
+        /// </summary>
+        /// <param name="id">The id of the tracker.</param>
+        /// <param name="token">The cancellation token.</param>
+        public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
+        {
+            try
+            {
+                await _httpClient.DeleteAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), token);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException($"time tracker with id {id} not found", wex);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates a time tracker with the given values. Omitting values will keep the old values.
+        /// </summary>
+        /// <param name="id">The id of the time tracker.</param>
+        /// <param name="values">The new values.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task UpdateAsync(int id, TimeTrackerUpdate values, CancellationToken token = default(CancellationToken))
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            try
+            {
+                var request = new TimeTrackerUpdateRequest { Values = values };
+                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                await _httpClient.PutStringAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), data, token);
+
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException($"time tracker with id {id} not found", wex);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }

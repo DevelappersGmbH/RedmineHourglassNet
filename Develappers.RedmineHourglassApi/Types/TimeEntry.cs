@@ -29,12 +29,18 @@ namespace Develappers.RedmineHourglassApi.Types
         [JsonProperty("spent_on")]
         public DateTime SpentOn { get; set; }
 
+        // ReSharper disable once StringLiteralTypo
+        // ReSharper disable once InconsistentNaming
         [JsonProperty("tyear")]
         public int TYear { get; set; }
 
+        // ReSharper disable once StringLiteralTypo
+        // ReSharper disable once InconsistentNaming
         [JsonProperty("tmonth")]
         public int TMonth { get; set; }
 
+        // ReSharper disable once StringLiteralTypo
+        // ReSharper disable once InconsistentNaming
         [JsonProperty("tweek")]
         public int TWeek { get; set; }
 

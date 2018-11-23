@@ -15,12 +15,23 @@
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/DevelappersGmbH/RedmineHourglassNet/master/icon.png</PackageIconUrl>
-    <Version>0.0.2-alpha</Version>
+    <Version>0.2.0-alpha</Version>
     <RepositoryUrl>https://github.com/DevelappersGmbH/RedmineHourglassNet.git</RepositoryUrl>
     <PackageReleaseNotes>implemented all read operations</PackageReleaseNotes>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="LibLog" Version="5.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
