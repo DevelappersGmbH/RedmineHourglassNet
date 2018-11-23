@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
@@ -48,6 +49,14 @@ namespace Develappers.RedmineHourglassApi.Tests
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
             await client.TimeLogService.JoinAsync(new List<int>{3,4});
+        }
+
+        [Fact]
+        public async Task Split()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+            await client.TimeLogService.SplitAsync(3, DateTime.Now);
         }
     }
 }

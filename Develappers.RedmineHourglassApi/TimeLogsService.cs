@@ -100,6 +100,12 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
+        /// <summary>
+        /// Joins multiple time logs.
+        /// </summary>
+        /// <param name="ids">The ids of the time logs to join.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The time log data.</returns>
         public async Task<TimeLog> JoinAsync(List<int> ids, CancellationToken token = default(CancellationToken))
         {
             if (ids == null)
@@ -127,12 +133,33 @@ namespace Develappers.RedmineHourglassApi
 
 
         /// <summary>
+        /// Joins multiple time logs.
+        /// </summary>
+        /// <param name="id">The ids of the time logs to split.</param>
+        /// <param name="splitAt">The time to split the log at.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The new time log data.</returns>
+        public async Task<TimeLogSplitResult> SplitAsync(int id, DateTime splitAt, CancellationToken token = default(CancellationToken))
+        {
+            try
+            {
+                var response = await _httpClient.PostStringAsync(new Uri($"time_logs/{id}/split.json?split_at={splitAt:o}", UriKind.Relative), null, token);
+                return JsonConvert.DeserializeObject<TimeLogSplitResult>(response);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Books a time log.
         /// </summary>
         /// <param name="id">The id of the log.</param>
         /// <param name="value">The detail data.</param>
         /// <param name="token">The cancellation token.</param>
-        /// <returns>The time tracker data.</returns>
+        /// <returns>The time entry.</returns>
         public async Task<TimeEntry> BookAsync(int id, TimeBookingUpdate value, CancellationToken token = default(CancellationToken))
         {
             if (value == null)
