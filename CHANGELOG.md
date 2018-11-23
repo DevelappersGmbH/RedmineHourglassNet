@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - nothing
 
 ### Changed
-- nothing 
+- renamed properties for services in HourglassClient to be more convinient
 
 ### Removed
 - nothing
