@@ -71,6 +71,15 @@ namespace Develappers.RedmineHourglassApi
         /// </summary>
         /// <param name="ids">The list of ids to delete.</param>
         /// <param name="token">The cancellation token.</param>
+        /// <returns></returns>
         Task BulkDeleteAsync(List<int> ids, CancellationToken token = default(CancellationToken));
+
+        /// <summary>
+        /// Updates multiple time logs at once
+        /// </summary>
+        /// <param name="values">The items to update.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns></returns>
+        Task BulkUpdateAsync(List<TimeLogBulkUpdate> values, CancellationToken token = default(CancellationToken));
     }
 }
