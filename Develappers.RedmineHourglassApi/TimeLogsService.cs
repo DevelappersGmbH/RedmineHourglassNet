@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -97,6 +99,32 @@ namespace Develappers.RedmineHourglassApi
                 throw;
             }
         }
+
+        public async Task<TimeLog> JoinAsync(List<int> ids, CancellationToken token = default(CancellationToken))
+        {
+            if (ids == null)
+            {
+                throw new ArgumentNullException(nameof(ids));
+            }
+
+            if (ids.Count <= 1)
+            {
+                throw new ArgumentException("at least 2 logs are needed to execute join", nameof(ids));
+            }
+
+            try
+            {
+                var queryParams = string.Join("&", ids.Select(x => $"ids[]={x}"));
+                var response = await _httpClient.PostStringAsync(new Uri($"time_logs/join.json?{queryParams}", UriKind.Relative), null, token);
+                return JsonConvert.DeserializeObject<TimeLog>(response);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
+
 
         /// <summary>
         /// Books a time log.

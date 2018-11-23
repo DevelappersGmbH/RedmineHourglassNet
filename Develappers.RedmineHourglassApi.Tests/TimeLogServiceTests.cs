@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
 using Xunit;
@@ -15,7 +16,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         }
 
         [Fact]
-        public async Task GeLogById()
+        public async Task GetLog()
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
@@ -23,7 +24,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         }
 
         [Fact]
-        public async Task DeleteLogById()
+        public async Task DeleteLog()
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
@@ -31,7 +32,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         }
 
         [Fact]
-        public async Task BookById()
+        public async Task Book()
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
@@ -39,6 +40,14 @@ namespace Develappers.RedmineHourglassApi.Tests
             {
                 Comments = "blubb"
             });
+        }
+
+        [Fact]
+        public async Task Join()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+            await client.TimeLogService.JoinAsync(new List<int>{3,4});
         }
     }
 }
