@@ -47,6 +47,12 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
+        /// <summary>
+        /// Retrieves a time log by it's id.
+        /// </summary>
+        /// <param name="id">The id of the time log.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The time log.</returns>
         public async Task<TimeLog> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try

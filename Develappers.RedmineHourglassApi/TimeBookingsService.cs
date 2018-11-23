@@ -49,6 +49,12 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
+        /// <summary>
+        /// Retrieves a time booking by it's id.
+        /// </summary>
+        /// <param name="id">The id of the time booking.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The time booking.</returns>
         public async Task<TimeBooking> GetByIdAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
@@ -87,7 +93,7 @@ namespace Develappers.RedmineHourglassApi
             {
                 var request = new TimeBookingUpdateRequest { Values = values };
                 var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
-                var response = await _httpClient.PutStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), data, token);
+                await _httpClient.PutStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), data, token);
 
             }
             catch (WebException wex)
