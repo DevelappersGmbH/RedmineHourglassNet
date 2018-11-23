@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
 using Xunit;
@@ -61,6 +62,14 @@ namespace Develappers.RedmineHourglassApi.Tests
             {
                 Comments = "bla1"
             });
+        }
+
+        [Fact]
+        public async Task BulkDelete()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeTrackers.BulkDeleteAsync(new List<int> { 3, 4 });
         }
     }
 }
