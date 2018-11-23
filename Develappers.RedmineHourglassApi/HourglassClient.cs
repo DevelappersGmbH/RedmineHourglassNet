@@ -44,16 +44,16 @@ namespace Develappers.RedmineHourglassApi
         /// <summary>
         /// The service to access time bookings.
         /// </summary>
-        public TimeBookingService TimeBookings { get; }
+        public ITimeBookingService TimeBookings { get; }
 
         /// <summary>
         /// The service to access time logs.
         /// </summary>
-        public TimeLogService TimeLogs { get; }
+        public ITimeLogService TimeLogs { get; }
 
         /// <summary>
         /// The service to access time logs.
         /// </summary>
-        public TimeTrackerService TimeTrackers { get; }
+        public ITimeTrackerService TimeTrackers { get; }
     }
 }

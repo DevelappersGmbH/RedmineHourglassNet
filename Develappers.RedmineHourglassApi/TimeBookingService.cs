@@ -10,7 +10,7 @@ using Develappers.RedmineHourglassApi.Logging;
 
 namespace Develappers.RedmineHourglassApi
 {
-    public class TimeBookingService
+    public class TimeBookingService : ITimeBookingService
     {
         private readonly HttpClient _httpClient;
 
@@ -24,12 +24,7 @@ namespace Develappers.RedmineHourglassApi
             _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
 
-        /// <summary>
-        /// Lists all visible time bookings
-        /// </summary>
-        /// <param name="filter">The filter options.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns>The paged list of results.</returns>
+        /// <inheritdoc />
         public async Task<PaginatedResult<TimeBooking>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
         {
             if (filter == null)
@@ -49,12 +44,7 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        /// <summary>
-        /// Retrieves a time booking by it's id.
-        /// </summary>
-        /// <param name="id">The id of the time booking.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns>The time booking.</returns>
+        /// <inheritdoc />
         public async Task<TimeBooking> GetAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
@@ -75,13 +65,7 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        /// <summary>
-        /// Updates a time booking with the given values. Omitting values will keep the old values.
-        /// </summary>
-        /// <param name="id">The id of the time booking.</param>
-        /// <param name="values">The new values.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task UpdateAsync(int id, TimeBookingUpdate values, CancellationToken token = default(CancellationToken))
         {
             if (values == null)
@@ -107,13 +91,9 @@ namespace Develappers.RedmineHourglassApi
                 LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 throw;
             }
-        } 
+        }
 
-        /// <summary>
-        /// Deletes a time booking.
-        /// </summary>
-        /// <param name="id">The id of the booking.</param>
-        /// <param name="token">The cancellation token.</param>
+        /// <inheritdoc />
         public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
@@ -133,11 +113,7 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        /// <summary>
-        /// Deletes multiple time bookings at once.
-        /// </summary>
-        /// <param name="ids">The list of ids to delete.</param>
-        /// <param name="token">The cancellation token.</param>
+        /// <inheritdoc />
         public async Task BulkDeleteAsync(List<int> ids, CancellationToken token = default(CancellationToken))
         {
             if (ids == null)

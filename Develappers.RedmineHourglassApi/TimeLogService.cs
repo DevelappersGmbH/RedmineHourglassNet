@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Develappers.RedmineHourglassApi
 {
-    public class TimeLogService
+    public class TimeLogService : ITimeLogService
     {
         private readonly HttpClient _httpClient;
 
@@ -24,12 +24,7 @@ namespace Develappers.RedmineHourglassApi
             _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
 
-        /// <summary>
-        /// Lists all visible time logs
-        /// </summary>
-        /// <param name="filter">The filter options.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns>The paged list of results.</returns>
+        /// <inheritdoc />
         public async Task<PaginatedResult<TimeLog>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
         {
             if (filter == null)
@@ -49,12 +44,7 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        /// <summary>
-        /// Retrieves a time log by it's id.
-        /// </summary>
-        /// <param name="id">The id of the time log.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns>The time log.</returns>
+        /// <inheritdoc />
         public async Task<TimeLog> GetAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
@@ -76,11 +66,7 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        /// <summary>
-        /// Deletes a time log.
-        /// </summary>
-        /// <param name="id">The id of the log.</param>
-        /// <param name="token">The cancellation token.</param>
+        /// <inheritdoc />
         public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
         {
             try
@@ -100,12 +86,7 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        /// <summary>
-        /// Joins multiple time logs.
-        /// </summary>
-        /// <param name="ids">The ids of the time logs to join.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns>The time log data.</returns>
+        /// <inheritdoc />
         public async Task<TimeLog> JoinAsync(List<int> ids, CancellationToken token = default(CancellationToken))
         {
             if (ids == null)
@@ -132,13 +113,7 @@ namespace Develappers.RedmineHourglassApi
         }
 
 
-        /// <summary>
-        /// Joins multiple time logs.
-        /// </summary>
-        /// <param name="id">The ids of the time logs to split.</param>
-        /// <param name="splitAt">The time to split the log at.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns>The new time log data.</returns>
+        /// <inheritdoc />
         public async Task<TimeLogSplitResult> SplitAsync(int id, DateTime splitAt, CancellationToken token = default(CancellationToken))
         {
             try
@@ -153,13 +128,7 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        /// <summary>
-        /// Books a time log.
-        /// </summary>
-        /// <param name="id">The id of the log.</param>
-        /// <param name="value">The detail data.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns>The time entry.</returns>
+        /// <inheritdoc />
         public async Task<TimeEntry> BookAsync(int id, TimeBookingUpdate value, CancellationToken token = default(CancellationToken))
         {
             if (value == null)
@@ -181,13 +150,7 @@ namespace Develappers.RedmineHourglassApi
             }
         }
 
-        /// <summary>
-        /// Updates a time log with the given values. Omitting values will keep the old values.
-        /// </summary>
-        /// <param name="id">The id of the time log.</param>
-        /// <param name="values">The new values.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task UpdateAsync(int id, TimeLogUpdate values, CancellationToken token = default(CancellationToken))
         {
             if (values == null)
@@ -216,11 +179,7 @@ namespace Develappers.RedmineHourglassApi
         }
 
 
-        /// <summary>
-        /// Deletes multiple time logs at once.
-        /// </summary>
-        /// <param name="ids">The list of ids to delete.</param>
-        /// <param name="token">The cancellation token.</param>
+        /// <inheritdoc />
         public async Task BulkDeleteAsync(List<int> ids, CancellationToken token = default(CancellationToken))
         {
             if (ids == null)
