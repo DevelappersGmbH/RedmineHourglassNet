@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
@@ -12,7 +13,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config);
-           var bookings =  await client.TimeBookingService.GetListAsync(new BaseListFilter());
+           var bookings =  await client.TimeBookings.GetListAsync(new BaseListFilter());
         }
 
         [Fact]
@@ -20,7 +21,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            var booking = await client.TimeBookingService.GetAsync(2);
+            var booking = await client.TimeBookings.GetAsync(2);
         }
 
         [Fact]
@@ -28,7 +29,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeBookingService.DeleteAsync(2);
+            await client.TimeBookings.DeleteAsync(2);
         }
 
         [Fact]
@@ -36,7 +37,21 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeBookingService.BulkDeleteAsync(new List<int>{3,4});
+            await client.TimeBookings.BulkDeleteAsync(new List<int>{3,4});
+        }
+
+        [Fact]
+        public async Task BulkCreateBookings()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeBookings.BulkCreateAsync(new List<TimeBookingBulkCreate>
+            {
+                new TimeBookingBulkCreate { Start = new DateTime(2018,11,23,9,0,0), Stop = new DateTime(2018,11,23,9,10,0), ProjectId = 11, ActivityId = 8, UserId = 13},
+                new TimeBookingBulkCreate { Start = new DateTime(2018,11,23,9,11,0), Stop = new DateTime(2018,11,23,9,20,0), ProjectId = 11, ActivityId = 8 , UserId = 13}
+
+
+            });
         }
 
         [Fact]
@@ -44,8 +59,8 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            var booking = await client.TimeBookingService.GetAsync(5);
-            await client.TimeBookingService.UpdateAsync(5, new TimeBookingUpdate
+            var booking = await client.TimeBookings.GetAsync(5);
+            await client.TimeBookings.UpdateAsync(5, new TimeBookingUpdate
             {
                 //Start = booking.Start,
                 //Stop = booking.Stop,

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
 using Xunit;
@@ -11,7 +12,8 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config);
-           var logs =  await client.TimeTrackerService.GetListAsync(new BaseListFilter());
+            config.RedmineUrl = "a";
+           var logs =  await client.TimeTrackers.GetListAsync(new BaseListFilter());
         }
 
         [Fact]
@@ -19,7 +21,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            var log = await client.TimeTrackerService.GetAsync(105);
+            var log = await client.TimeTrackers.GetAsync(105);
         }
 
 
@@ -28,7 +30,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            var log = await client.TimeTrackerService.StartAsync(new TimeTrackerStartOptions
+            var log = await client.TimeTrackers.StartAsync(new TimeTrackerStartOptions
             {
                 IssueId = 64,
                 Comments = "test 1"
@@ -40,7 +42,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            var log = await client.TimeTrackerService.StopAsync(6);
+            var log = await client.TimeTrackers.StopAsync(6);
         }
 
         [Fact]
@@ -48,7 +50,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeTrackerService.DeleteAsync(13);
+            await client.TimeTrackers.DeleteAsync(13);
         }
 
         [Fact]
@@ -56,10 +58,18 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeTrackerService.UpdateAsync(14, new TimeTrackerUpdate
+            await client.TimeTrackers.UpdateAsync(14, new TimeTrackerUpdate
             {
                 Comments = "bla1"
             });
+        }
+
+        [Fact]
+        public async Task BulkDelete()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeTrackers.BulkDeleteAsync(new List<int> { 3, 4 });
         }
     }
 }

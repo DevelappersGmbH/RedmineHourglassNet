@@ -13,7 +13,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config);
-           var logs =  await client.TimeLogService.GetListAsync(new BaseListFilter());
+           var logs =  await client.TimeLogs.GetListAsync(new BaseListFilter());
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            var log = await client.TimeLogService.GetAsync(18);
+            var log = await client.TimeLogs.GetAsync(18);
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeLogService.DeleteAsync(18);
+            await client.TimeLogs.DeleteAsync(18);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeLogService.BookAsync(18, new TimeBookingUpdate()
+            await client.TimeLogs.BookAsync(18, new TimeBookingUpdate()
             {
                 Comments = "blubb"
             });
@@ -48,7 +48,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeLogService.JoinAsync(new List<int>{3,4});
+            await client.TimeLogs.JoinAsync(new List<int>{3,4});
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeLogService.SplitAsync(3, DateTime.Now);
+            await client.TimeLogs.SplitAsync(3, DateTime.Now);
         }
 
 
@@ -65,9 +65,32 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeLogService.UpdateAsync(14, new TimeLogUpdate
+            await client.TimeLogs.UpdateAsync(14, new TimeLogUpdate
             {
                 Comments = "bla1"
+            });
+        }
+
+
+        [Fact]
+        public async Task BulkDeleteLogs()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeLogs.BulkDeleteAsync(new List<int> { 3, 4 });
+        }
+
+        [Fact]
+        public async Task BulkCreate()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeLogs.BulkCreateAsync(new List<TimeLogBulkCreate>
+            {
+                new TimeLogBulkCreate { Start = new DateTime(2018,11,23,10,0,0), Stop = new DateTime(2018,11,23,10,10,0), UserId = 13, Comments = "bla"},
+                new TimeLogBulkCreate { Start = new DateTime(2018,11,23,10,11,0), Stop = new DateTime(2018,11,23,10,20,0), UserId = 13}
+
+
             });
         }
     }
