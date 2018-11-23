@@ -73,5 +73,29 @@ namespace Develappers.RedmineHourglassApi
                 throw;
             }
         }
+
+        /// <summary>
+        /// Deletes a time log.
+        /// </summary>
+        /// <param name="id">The id of the log.</param>
+        /// <param name="token">The cancellation token.</param>
+        public async Task DeleteByIdAsync(int id, CancellationToken token = default(CancellationToken))
+        {
+            try
+            {
+                await _httpClient.DeleteAsync(new Uri($"time_logs/{id}.json", UriKind.Relative), token);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException($"time log with id {id} not found", wex);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
     }
 }
