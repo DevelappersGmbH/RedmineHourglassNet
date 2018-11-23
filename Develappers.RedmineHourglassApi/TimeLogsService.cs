@@ -97,5 +97,33 @@ namespace Develappers.RedmineHourglassApi
                 throw;
             }
         }
+
+        /// <summary>
+        /// books a time log.
+        /// </summary>
+        /// <param name="id">The id of the log.</param>
+        /// <param name="value">The detail data.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The time tracker data.</returns>
+        public async Task<TimeEntry> BookByIdAsync(int id, TimeBookingUpdate value, CancellationToken token = default(CancellationToken))
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            try
+            {
+                var request = new TimeLogBookRequest { Values = value };
+                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var response = await _httpClient.PostStringAsync(new Uri($"time_logs/{id}/book.json", UriKind.Relative), data, token);
+                return JsonConvert.DeserializeObject<TimeEntry>(response);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
     }
 }
