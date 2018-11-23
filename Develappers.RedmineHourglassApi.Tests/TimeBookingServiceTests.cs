@@ -47,8 +47,8 @@ namespace Develappers.RedmineHourglassApi.Tests
             var client = new HourglassClient(config);
             await client.TimeBookings.BulkCreateAsync(new List<TimeBookingBulkCreate>
             {
-                new TimeBookingBulkCreate(){ Start = new DateTime(2018,11,23,9,0,0), Stop = new DateTime(2018,11,23,9,10,0), ProjectId = 11, ActivityId = 8, UserId = 13},
-                new TimeBookingBulkCreate(){ Start = new DateTime(2018,11,23,9,11,0), Stop = new DateTime(2018,11,23,9,20,0), ProjectId = 11, ActivityId = 8 , UserId = 13}
+                new TimeBookingBulkCreate { Start = new DateTime(2018,11,23,9,0,0), Stop = new DateTime(2018,11,23,9,10,0), ProjectId = 11, ActivityId = 8, UserId = 13},
+                new TimeBookingBulkCreate { Start = new DateTime(2018,11,23,9,11,0), Stop = new DateTime(2018,11,23,9,20,0), ProjectId = 11, ActivityId = 8 , UserId = 13}
 
 
             });

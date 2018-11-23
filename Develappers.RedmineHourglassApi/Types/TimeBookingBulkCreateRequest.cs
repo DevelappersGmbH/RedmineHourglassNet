@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Develappers.RedmineHourglassApi.Types
 {
     /// <summary>
-    /// Class which wraps a <see cref="TimeBookingBulkUpdate"/> object to be API conform.
+    /// Class which wraps a <see cref="TimeBookingBulkCreate"/> object to be API conform.
     /// </summary>
     internal class TimeBookingBulkCreateRequest
     {

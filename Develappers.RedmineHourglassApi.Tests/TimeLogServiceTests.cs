@@ -79,5 +79,19 @@ namespace Develappers.RedmineHourglassApi.Tests
             var client = new HourglassClient(config);
             await client.TimeLogs.BulkDeleteAsync(new List<int> { 3, 4 });
         }
+
+        [Fact]
+        public async Task BulkCreate()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeLogs.BulkCreateAsync(new List<TimeLogBulkCreate>
+            {
+                new TimeLogBulkCreate { Start = new DateTime(2018,11,23,10,0,0), Stop = new DateTime(2018,11,23,10,10,0), UserId = 13, Comments = "bla"},
+                new TimeLogBulkCreate { Start = new DateTime(2018,11,23,10,11,0), Stop = new DateTime(2018,11,23,10,20,0), UserId = 13}
+
+
+            });
+        }
     }
 }
