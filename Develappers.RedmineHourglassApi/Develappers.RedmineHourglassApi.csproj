@@ -15,7 +15,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/DevelappersGmbH/RedmineHourglassNet/master/icon.png</PackageIconUrl>
-    <Version>0.0.2-alpha</Version>
+    <Version>0.2.0-alpha</Version>
     <RepositoryUrl>https://github.com/DevelappersGmbH/RedmineHourglassNet.git</RepositoryUrl>
     <PackageReleaseNotes>implemented all read operations</PackageReleaseNotes>
   </PropertyGroup>
