@@ -180,5 +180,39 @@ namespace Develappers.RedmineHourglassApi
                 throw;
             }
         }
+
+        /// <summary>
+        /// Updates a time log with the given values. Omitting values will keep the old values.
+        /// </summary>
+        /// <param name="id">The id of the time log.</param>
+        /// <param name="values">The new values.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task UpdateAsync(int id, TimeLogUpdate values, CancellationToken token = default(CancellationToken))
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            try
+            {
+                var request = new TimeLogUpdateRequest { Values = values };
+                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                await _httpClient.PutStringAsync(new Uri($"time_logs/{id}.json", UriKind.Relative), data, token);
+
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException($"time log with id {id} not found", wex);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
     }
 }

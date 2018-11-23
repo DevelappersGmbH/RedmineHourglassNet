@@ -52,7 +52,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         }
 
         [Fact]
-        public async Task UpdateTrackerById()
+        public async Task Update()
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);

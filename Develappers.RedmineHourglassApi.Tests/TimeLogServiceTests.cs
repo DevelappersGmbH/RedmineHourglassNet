@@ -58,5 +58,17 @@ namespace Develappers.RedmineHourglassApi.Tests
             var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
             await client.TimeLogService.SplitAsync(3, DateTime.Now);
         }
+
+
+        [Fact]
+        public async Task Update()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config.RedmineUrl, config.ApiKey);
+            await client.TimeLogService.UpdateAsync(14, new TimeLogUpdate
+            {
+                Comments = "bla1"
+            });
+        }
     }
 }
