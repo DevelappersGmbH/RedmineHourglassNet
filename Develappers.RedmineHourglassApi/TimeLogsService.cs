@@ -214,5 +214,36 @@ namespace Develappers.RedmineHourglassApi
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Deletes multiple time logs at once.
+        /// </summary>
+        /// <param name="ids">The list of ids to delete.</param>
+        /// <param name="token">The cancellation token.</param>
+        public async Task BulkDeleteAsync(List<int> ids, CancellationToken token = default(CancellationToken))
+        {
+            if (ids == null)
+            {
+                throw new ArgumentNullException(nameof(ids));
+            }
+
+            if (ids.Count == 0)
+            {
+                // no item to delete
+                return;
+            }
+
+            try
+            {
+                var queryParams = string.Join("&", ids.Select(x => $"time_logs[]={x}"));
+                await _httpClient.DeleteAsync(new Uri($"time_logs/bulk_destroy.json?{queryParams}", UriKind.Relative), token);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
     }
 }

@@ -70,5 +70,14 @@ namespace Develappers.RedmineHourglassApi.Tests
                 Comments = "bla1"
             });
         }
+
+
+        [Fact]
+        public async Task BulkDeleteLogs()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeLogService.BulkDeleteAsync(new List<int> { 3, 4 });
+        }
     }
 }
