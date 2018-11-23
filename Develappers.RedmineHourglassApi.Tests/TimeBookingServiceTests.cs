@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Develappers.RedmineHourglassApi.Types;
@@ -37,6 +38,20 @@ namespace Develappers.RedmineHourglassApi.Tests
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
             await client.TimeBookings.BulkDeleteAsync(new List<int>{3,4});
+        }
+
+        [Fact]
+        public async Task BulkCreateBookings()
+        {
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            await client.TimeBookings.BulkCreateAsync(new List<TimeBookingBulkCreate>
+            {
+                new TimeBookingBulkCreate(){ Start = new DateTime(2018,11,23,9,0,0), Stop = new DateTime(2018,11,23,9,10,0), ProjectId = 11, ActivityId = 8, UserId = 13},
+                new TimeBookingBulkCreate(){ Start = new DateTime(2018,11,23,9,11,0), Stop = new DateTime(2018,11,23,9,20,0), ProjectId = 11, ActivityId = 8 , UserId = 13}
+
+
+            });
         }
 
         [Fact]
