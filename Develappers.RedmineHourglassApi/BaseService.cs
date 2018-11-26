@@ -341,5 +341,62 @@ namespace Develappers.RedmineHourglassApi
                 throw;
             }
         }
+
+        /// <summary>
+        /// Executes a post.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result object.</typeparam>
+        /// <typeparam name="TRequest">Th type of the request object.</typeparam>
+        /// <param name="uri">The uri to post to.</param>
+        /// <param name="value">The value to post.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <returns>The task.</returns>
+        public async Task<TResult> PostAsync<TResult, TRequest>(Uri uri, TRequest value, CancellationToken token = default(CancellationToken))
+        {
+            try
+            {
+                string data = null;
+                if (value != null)
+                {
+                    data = JsonConvert.SerializeObject(value, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                }
+                var response = await HttpClient.PostStringAsync(uri, data, token);
+                return JsonConvert.DeserializeObject<TResult>(response);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            {
+                // extract the error from web response
+                var error = wex.ExtractError();
+                if (error != null)
+                {
+                    // successfully deserialized an error object
+                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(value), wex);
+                }
+
+                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(value), wex);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
+                throw new AuthenticationException("Missing or invalid authentication information.", wex);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
+            {
+                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
+                throw new AuthorizationException("Not authorized to access this resource.", wex);
+            }
+            catch (Exception ex)
+            {
+                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                throw;
+            }
+        }
     }
 }

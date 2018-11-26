@@ -1,10 +1,7 @@
-﻿using Develappers.RedmineHourglassApi.Logging;
-using Develappers.RedmineHourglassApi.Types;
-using Newtonsoft.Json;
+﻿using Develappers.RedmineHourglassApi.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,91 +50,15 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentException("at least 2 logs are needed to execute join", nameof(ids));
             }
 
-            try
-            {
-                var queryParams = string.Join("&", ids.Select(x => $"ids[]={x}"));
-                var response = await HttpClient.PostStringAsync(new Uri($"time_logs/join.json?{queryParams}", UriKind.Relative), null, token);
-                return JsonConvert.DeserializeObject<TimeLog>(response);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
-            {
-                // extract the error from web response
-                var error = wex.ExtractError();
-                if (error != null)
-                {
-                    // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
-                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(ids), wex);
-                }
-
-                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(ids), wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
-                throw new AuthenticationException("Missing or invalid authentication information.", wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
-            {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
-                throw new AuthorizationException("Not authorized to access this resource.", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            var queryParams = string.Join("&", ids.Select(x => $"ids[]={x}"));
+            return await PostAsync<TimeLog, object>(new Uri($"time_logs/join.json?{queryParams}", UriKind.Relative), null, token).ConfigureAwait(false);
         }
 
 
         /// <inheritdoc />
         public async Task<TimeLogSplitResult> SplitAsync(int id, DateTime splitAt, CancellationToken token = default(CancellationToken))
         {
-            try
-            {
-                var response = await HttpClient.PostStringAsync(new Uri($"time_logs/{id}/split.json?split_at={splitAt:o}", UriKind.Relative), null, token);
-                return JsonConvert.DeserializeObject<TimeLogSplitResult>(response);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
-            {
-                // extract the error from web response
-                var error = wex.ExtractError();
-                if (error != null)
-                {
-                    // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
-                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(id), wex);
-                }
-
-                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(id), wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
-                throw new AuthenticationException("Missing or invalid authentication information.", wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
-            {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
-                throw new AuthorizationException("Not authorized to access this resource.", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            return await PostAsync<TimeLogSplitResult, object>(new Uri($"time_logs/{id}/split.json?split_at={splitAt:o}", UriKind.Relative), null, token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -148,47 +69,7 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(value));
             }
 
-            try
-            {
-                var request = new TimeLogBookRequest { Values = value };
-                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                var response = await HttpClient.PostStringAsync(new Uri($"time_logs/{id}/book.json", UriKind.Relative), data, token);
-                return JsonConvert.DeserializeObject<TimeEntry>(response);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
-            {
-                // extract the error from web response
-                var error = wex.ExtractError();
-                if (error != null)
-                {
-                    // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
-                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(value), wex);
-                }
-
-                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(value), wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
-                throw new AuthenticationException("Missing or invalid authentication information.", wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
-            {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
-                throw new AuthorizationException("Not authorized to access this resource.", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            return await PostAsync<TimeEntry, TimeLogBookRequest>(new Uri($"time_logs/{id}/book.json", UriKind.Relative), new TimeLogBookRequest { Values = value }, token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -257,52 +138,19 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(values));
             }
 
-            try
+            if (values == null)
             {
-                var dict = new Dictionary<string, TimeBookingBulkUpdate>();
-                for (var i = 0; i < values.Count; i++)
-                {
-                    dict.Add($"additionalProp{i + 1}", values[i]);
-                }
-                var request = new TimeLogBulkBookRequest { Values = dict };
-                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                await HttpClient.PostStringAsync(new Uri("time_logs/bulk_book.json", UriKind.Relative), data, token);
+                throw new ArgumentNullException(nameof(values));
+            }
 
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            var dict = new Dictionary<string, TimeBookingBulkUpdate>();
+            for (var i = 0; i < values.Count; i++)
             {
-                // extract the error from web response
-                var error = wex.ExtractError();
-                if (error != null)
-                {
-                    // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
-                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(values), wex);
-                }
+                dict.Add($"additionalProp{i + 1}", values[i]);
+            }
+            var request = new TimeLogBulkBookRequest { Values = dict };
 
-                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(values), wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
-                throw new AuthenticationException("Missing or invalid authentication information.", wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
-            {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
-                throw new AuthorizationException("Not authorized to access this resource.", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            await BulkUpdateAsync(new Uri("time_logs/bulk_book.json", UriKind.Relative), request, token).ConfigureAwait(false);
         }
     }
 }
