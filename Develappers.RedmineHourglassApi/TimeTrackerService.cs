@@ -152,6 +152,21 @@ namespace Develappers.RedmineHourglassApi
             {
                 throw new NotFoundException($"time tracker with id {id} not found", wex);
             }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            {
+                // extract the error from web response
+                var error = wex.ExtractError();
+                if (error != null)
+                {
+                    // successfully deserialized an error object
+                    LogProvider.GetCurrentClassLogger().InfoException($"exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(values), wex);
+                }
+
+                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(values), wex);
+            }
             catch (Exception ex)
             {
                 LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
@@ -178,6 +193,21 @@ namespace Develappers.RedmineHourglassApi
                 var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 await _httpClient.PostStringAsync(new Uri("time_trackers/bulk_update.json", UriKind.Relative), data, token);
 
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            {
+                // extract the error from web response
+                var error = wex.ExtractError();
+                if (error != null)
+                {
+                    // successfully deserialized an error object
+                    LogProvider.GetCurrentClassLogger().InfoException($"exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(values), wex);
+                }
+
+                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(values), wex);
             }
             catch (Exception ex)
             {
