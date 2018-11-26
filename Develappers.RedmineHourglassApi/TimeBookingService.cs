@@ -168,7 +168,7 @@ namespace Develappers.RedmineHourglassApi
                 if (error != null)
                 {
                     // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
                     throw new ArgumentException(string.Join("\r\n", error.Message), nameof(values), wex);
                 }
 
@@ -206,7 +206,7 @@ namespace Develappers.RedmineHourglassApi
                 if (error != null)
                 {
                     // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
                     throw new ArgumentException(string.Join("\r\n", error.Message), nameof(values), wex);
                 }
 
