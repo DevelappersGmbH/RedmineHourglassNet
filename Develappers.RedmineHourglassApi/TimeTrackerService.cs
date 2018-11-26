@@ -1,27 +1,20 @@
-﻿using System;
+﻿using Develappers.RedmineHourglassApi.Logging;
+using Develappers.RedmineHourglassApi.Types;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Develappers.RedmineHourglassApi.Logging;
-using Develappers.RedmineHourglassApi.Types;
-using Newtonsoft.Json;
 
 namespace Develappers.RedmineHourglassApi
 {
-    public class TimeTrackerService : ITimeTrackerService
+    public class TimeTrackerService : BaseService, ITimeTrackerService
     {
-        private readonly HttpClient _httpClient;
-
-        /// <summary>
-        /// Creates an instance of the service.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        internal TimeTrackerService(Configuration configuration)
+        /// <inheritdoc />
+        internal TimeTrackerService(Configuration configuration) : base(configuration)
         {
-            // internal constructor -> configuration is always set and valid
-            _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
 
         /// <inheritdoc />
@@ -32,17 +25,7 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            try
-            {
-                var response = await _httpClient.GetStringAsync(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
-                return JsonConvert.DeserializeObject<PaginatedResult<TimeTracker>>(response);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
-
+            return await GetListAsync<TimeTracker>(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -57,8 +40,37 @@ namespace Develappers.RedmineHourglassApi
             {
                 var request = new TimeTrackerStartRequest { Values = value };
                 var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                var response = await _httpClient.PostStringAsync(new Uri("time_trackers/start.json", UriKind.Relative), data, token);
+                var response = await HttpClient.PostStringAsync(new Uri("time_trackers/start.json", UriKind.Relative), data, token);
                 return JsonConvert.DeserializeObject<TimeTracker>(response);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            {
+                // extract the error from web response
+                var error = wex.ExtractError();
+                if (error != null)
+                {
+                    // successfully deserialized an error object
+                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(value), wex);
+                }
+
+                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(value), wex);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
+                throw new AuthenticationException("Missing or invalid authentication information.", wex);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
+            {
+                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
+                throw new AuthorizationException("Not authorized to access this resource.", wex);
             }
             catch (Exception ex)
             {
@@ -72,7 +84,7 @@ namespace Develappers.RedmineHourglassApi
         {
             try
             {
-                var response = await _httpClient.DeleteAsync(new Uri($"time_trackers/{id}/stop.json", UriKind.Relative), token);
+                var response = await HttpClient.DeleteAsync(new Uri($"time_trackers/{id}/stop.json", UriKind.Relative), token);
                 var result = JsonConvert.DeserializeObject<TimeTrackerStopResponse>(response);
                 return result.TimeLog;
             }
@@ -81,6 +93,35 @@ namespace Develappers.RedmineHourglassApi
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
             {
                 throw new NotFoundException($"time tracker with id {id} not found", wex);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
+            {
+                // extract the error from web response
+                var error = wex.ExtractError();
+                if (error != null)
+                {
+                    // successfully deserialized an error object
+                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(id), wex);
+                }
+
+                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(id), wex);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
+                throw new AuthenticationException("Missing or invalid authentication information.", wex);
+            }
+            catch (WebException wex)
+                when (wex.Status == WebExceptionStatus.ProtocolError &&
+                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
+            {
+                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
+                throw new AuthorizationException("Not authorized to access this resource.", wex);
             }
             catch (Exception ex)
             {
@@ -92,43 +133,13 @@ namespace Develappers.RedmineHourglassApi
         /// <inheritdoc />
         public async Task<TimeTracker> GetAsync(int id, CancellationToken token = default(CancellationToken))
         {
-            try
-            {
-
-                var response = await _httpClient.GetStringAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), token);
-                return JsonConvert.DeserializeObject<TimeTracker>(response);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException($"time tracker with id {id} not found", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            return await GetAsync<TimeTracker>(new Uri($"time_trackers/{id}.json", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
         {
-            try
-            {
-                await _httpClient.DeleteAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), token);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException($"time tracker with id {id} not found", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            await DeleteAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -139,39 +150,7 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(values));
             }
 
-            try
-            {
-                var request = new TimeTrackerUpdateRequest { Values = values };
-                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                await _httpClient.PutStringAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), data, token);
-
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException($"time tracker with id {id} not found", wex);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
-            {
-                // extract the error from web response
-                var error = wex.ExtractError();
-                if (error != null)
-                {
-                    // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
-                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(values), wex);
-                }
-
-                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(values), wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            await UpdateAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), new TimeTrackerUpdateRequest { Values = values }, token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -182,38 +161,15 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(values));
             }
 
-            try
+            var dict = new Dictionary<string, TimeTrackerBulkUpdate>();
+            for (var i = 0; i < values.Count; i++)
             {
-                var dict = new Dictionary<string, TimeTrackerBulkUpdate>();
-                for (var i = 0; i < values.Count; i++)
-                {
-                    dict.Add($"additionalProp{i + 1}", values[i]);
-                }
-                var request = new TimeTrackerBulkUpdateRequest { Values = dict };
-                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                await _httpClient.PostStringAsync(new Uri("time_trackers/bulk_update.json", UriKind.Relative), data, token);
+                dict.Add($"additionalProp{i + 1}", values[i]);
+            }
+            var request = new TimeTrackerBulkUpdateRequest { Values = dict };
 
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.BadRequest)
-            {
-                // extract the error from web response
-                var error = wex.ExtractError();
-                if (error != null)
-                {
-                    // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
-                    throw new ArgumentException(string.Join("\r\n", error.Message), nameof(values), wex);
-                }
 
-                throw new ArgumentException("Invalid arguments. See inner exception for details.", nameof(values), wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            await BulkUpdateAsync(new Uri("time_trackers/bulk_update.json", UriKind.Relative), request, token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -230,16 +186,8 @@ namespace Develappers.RedmineHourglassApi
                 return;
             }
 
-            try
-            {
-                var queryParams = string.Join("&", ids.Select(x => $"time_trackers[]={x}"));
-                await _httpClient.DeleteAsync(new Uri($"time_trackers/bulk_destroy.json?{queryParams}", UriKind.Relative), token);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            var queryParams = string.Join("&", ids.Select(x => $"time_trackers[]={x}"));
+            await BulkDeleteAsync(new Uri($"time_trackers/bulk_destroy.json?{queryParams}", UriKind.Relative), token).ConfigureAwait(false);
         }
     }
 }
