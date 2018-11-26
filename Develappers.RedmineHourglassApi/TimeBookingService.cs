@@ -1,27 +1,17 @@
-﻿using System;
+﻿using Develappers.RedmineHourglassApi.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Develappers.RedmineHourglassApi.Types;
-using Newtonsoft.Json;
 using System.Threading;
-using Develappers.RedmineHourglassApi.Logging;
+using System.Threading.Tasks;
 
 namespace Develappers.RedmineHourglassApi
 {
-    public class TimeBookingService : ITimeBookingService
+    public class TimeBookingService : BaseService, ITimeBookingService
     {
-        private readonly HttpClient _httpClient;
-
-        /// <summary>
-        /// Creates an instance of the service.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        internal TimeBookingService(Configuration configuration)
+        /// <inheritdoc />
+        internal TimeBookingService(Configuration configuration) : base(configuration)
         {
-            // internal constructor -> configuration is always set and valid
-            _httpClient = new HttpClient(configuration.RedmineUrl, configuration.ApiKey);
         }
 
         /// <inheritdoc />
@@ -32,37 +22,13 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            try
-            {
-                var response = await _httpClient.GetStringAsync(new Uri($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token);
-                return JsonConvert.DeserializeObject<PaginatedResult<TimeBooking>>(response);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            return await GetListAsync<TimeBooking>(new Uri($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<TimeBooking> GetAsync(int id, CancellationToken token = default(CancellationToken))
         {
-            try
-            {
-                var response = await _httpClient.GetStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), token);
-                return JsonConvert.DeserializeObject<TimeBooking>(response);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException($"time booking with id {id} not found", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            return await GetAsync<TimeBooking>(new Uri($"time_bookings/{id}.json", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -73,44 +39,13 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(values));
             }
 
-            try
-            {
-                var request = new TimeBookingUpdateRequest { Values = values };
-                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
-                await _httpClient.PutStringAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), data, token);
-
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException($"time booking with id {id} not found", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            await UpdateAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), new TimeBookingUpdateRequest { Values = values }, token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
         {
-            try
-            {
-                await _httpClient.DeleteAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), token);
-            }
-            catch (WebException wex)
-                when (wex.Status == WebExceptionStatus.ProtocolError &&
-                      (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new NotFoundException($"time booking with id {id} not found", wex);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            await DeleteAsync(new Uri($"time_bookings/{id}.json", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -127,16 +62,8 @@ namespace Develappers.RedmineHourglassApi
                 return;
             }
 
-            try
-            {
-                var queryParams = string.Join("&", ids.Select(x => $"time_bookings[]={x}"));
-                await _httpClient.DeleteAsync(new Uri($"time_bookings/bulk_destroy.json?{queryParams}", UriKind.Relative), token);
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            var queryParams = string.Join("&", ids.Select(x => $"time_bookings[]={x}"));
+            await BulkDeleteAsync(new Uri($"time_bookings/bulk_destroy.json?{queryParams}", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -147,23 +74,14 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(values));
             }
 
-            try
+            var dict = new Dictionary<string, TimeBookingBulkUpdate>();
+            for (var i = 0; i < values.Count; i++)
             {
-                var dict = new Dictionary<string, TimeBookingBulkUpdate>();
-                for (var i = 0; i < values.Count; i++)
-                {
-                    dict.Add($"additionalProp{i + 1}", values[i]);
-                }
-                var request = new TimeBookingBulkUpdateRequest { Values = dict };
-                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                await _httpClient.PostStringAsync(new Uri("time_bookings/bulk_update.json", UriKind.Relative), data, token);
+                dict.Add($"additionalProp{i + 1}", values[i]);
+            }
+            var request = new TimeBookingBulkUpdateRequest { Values = dict };
 
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            await BulkUpdateAsync(new Uri("time_bookings/bulk_update.json", UriKind.Relative), request, token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -174,18 +92,7 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentNullException(nameof(values));
             }
 
-            try
-            {
-                var request = new TimeBookingBulkCreateRequest { Values = values };
-                var data = JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                await _httpClient.PostStringAsync(new Uri("time_bookings/bulk_create.json", UriKind.Relative), data, token);
-
-            }
-            catch (Exception ex)
-            {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
-                throw;
-            }
+            await BulkCreateAsync(new Uri("time_bookings/bulk_create.json", UriKind.Relative), new TimeBookingBulkCreateRequest { Values = values }, token).ConfigureAwait(false);
         }
     }
 }
