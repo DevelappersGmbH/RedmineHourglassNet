@@ -10,10 +10,10 @@ namespace Develappers.RedmineHourglassApi
         /// <summary>
         /// Lists all visible time bookings
         /// </summary>
-        /// <param name="filter">The filter options.</param>
+        /// <param name="query">The filter options.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The paged list of results.</returns>
-        Task<PaginatedResult<TimeBooking>> GetListAsync(TimeBookingListFilter filter, CancellationToken token = default(CancellationToken));
+        Task<PaginatedResult<TimeBooking>> GetListAsync(TimeBookingListQuery query, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Retrieves a time booking by it's id.

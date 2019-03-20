@@ -15,14 +15,14 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<TimeLog>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeLog>> GetListAsync(BaseListQuery query, CancellationToken token = default(CancellationToken))
         {
-            if (filter == null)
+            if (query == null)
             {
-                throw new ArgumentNullException(nameof(filter));
+                throw new ArgumentNullException(nameof(query));
             }
 
-            return await GetListAsync<TimeLog>(new Uri($"time_logs.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token).ConfigureAwait(false);
+            return await GetListAsync<TimeLog>(new Uri($"time_logs.json?offset={query.Offset}&limit={query.Limit}", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

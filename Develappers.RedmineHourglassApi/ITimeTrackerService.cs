@@ -10,10 +10,10 @@ namespace Develappers.RedmineHourglassApi
         /// <summary>
         /// Lists all visible running time trackers.
         /// </summary>
-        /// <param name="filter">The filter options.</param>
+        /// <param name="query">The filter options.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The paged list of results.</returns>
-        Task<PaginatedResult<TimeTracker>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken));
+        Task<PaginatedResult<TimeTracker>> GetListAsync(BaseListQuery query, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Starts a new time tracker. (If there's already a started tracker, this method will throw an exception)

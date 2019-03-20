@@ -18,14 +18,14 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<TimeTracker>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeTracker>> GetListAsync(BaseListQuery query, CancellationToken token = default(CancellationToken))
         {
-            if (filter == null)
+            if (query == null)
             {
-                throw new ArgumentNullException(nameof(filter));
+                throw new ArgumentNullException(nameof(query));
             }
 
-            return await GetListAsync<TimeTracker>(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token).ConfigureAwait(false);
+            return await GetListAsync<TimeTracker>(new Uri($"time_trackers.json?offset={query.Offset}&limit={query.Limit}", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

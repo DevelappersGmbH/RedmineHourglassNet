@@ -12,7 +12,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
            var config = Helpers.GetTestConfiguration();
            var client = new HourglassClient(config);
-           var logs =  await client.TimeTrackers.GetListAsync(new BaseListFilter());
+           var logs =  await client.TimeTrackers.GetListAsync(new BaseListQuery());
         }
 
         [Fact]

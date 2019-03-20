@@ -16,19 +16,19 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<TimeBooking>> GetListAsync(TimeBookingListFilter filter, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeBooking>> GetListAsync(TimeBookingListQuery query, CancellationToken token = default(CancellationToken))
         {
-            if (filter == null)
+            if (query == null)
             {
-                throw new ArgumentNullException(nameof(filter));
+                throw new ArgumentNullException(nameof(query));
             }
 
             var urlBuilder = new StringBuilder();
-            urlBuilder.Append($"time_bookings.json?offset={filter.Offset}&limit={filter.Limit}");
+            urlBuilder.Append($"time_bookings.json?offset={query.Offset}&limit={query.Limit}");
             
-            if (filter.From.HasValue && filter.To.HasValue)
+            if (query.Filter.From.HasValue && query.Filter.To.HasValue)
             {
-                urlBuilder.Append($"&date=><{filter.From.Value.ToString("yyyy-MM-dd")}|{filter.To.Value.ToString("yyyy-MM-dd")}");
+                urlBuilder.Append($"&date=><{query.Filter.From.Value.ToString("yyyy-MM-dd")}|{query.Filter.To.Value.ToString("yyyy-MM-dd")}");
             }
 
             return await GetListAsync<TimeBooking>(new Uri(urlBuilder.ToString(), UriKind.Relative), token).ConfigureAwait(false);
