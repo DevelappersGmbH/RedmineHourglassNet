@@ -26,9 +26,11 @@ namespace Develappers.RedmineHourglassApi
             var urlBuilder = new StringBuilder();
             urlBuilder.Append($"time_bookings.json?offset={query.Offset}&limit={query.Limit}");
             
-            if (query.Filter.From.HasValue && query.Filter.To.HasValue)
+            if (query.Filter.From.HasValue || query.Filter.To.HasValue)
             {
-                urlBuilder.Append($"&date=><{query.Filter.From.Value:yyyy-MM-dd}|{query.Filter.To.Value:yyyy-MM-dd}");
+                var from = DateTime.SpecifyKind(query.Filter.From.GetValueOrDefault(DateTime.MinValue), DateTimeKind.Utc);
+                var to = DateTime.SpecifyKind(query.Filter.To.GetValueOrDefault(DateTime.MaxValue), DateTimeKind.Utc);
+                urlBuilder.Append($"&date=><{from:yyyy-MM-dd}|{to:yyyy-MM-dd}");
             }
 
             return await GetListAsync<TimeBooking>(new Uri(urlBuilder.ToString(), UriKind.Relative), token).ConfigureAwait(false);
