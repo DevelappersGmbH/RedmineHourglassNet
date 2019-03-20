@@ -28,7 +28,7 @@ namespace Develappers.RedmineHourglassApi
             
             if (query.Filter.From.HasValue && query.Filter.To.HasValue)
             {
-                urlBuilder.Append($"&date=><{query.Filter.From.Value.ToString("yyyy-MM-dd")}|{query.Filter.To.Value.ToString("yyyy-MM-dd")}");
+                urlBuilder.Append($"&date=><{query.Filter.From.Value:yyyy-MM-dd}|{query.Filter.To.Value:yyyy-MM-dd}");
             }
 
             return await GetListAsync<TimeBooking>(new Uri(urlBuilder.ToString(), UriKind.Relative), token).ConfigureAwait(false);
