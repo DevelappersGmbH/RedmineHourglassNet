@@ -33,6 +33,26 @@ namespace Develappers.RedmineHourglassApi
                 urlBuilder.Append($"&date=><{from:yyyy-MM-dd}|{to:yyyy-MM-dd}");
             }
 
+            if (query.Filter.UserId.HasValue)
+            {
+                urlBuilder.Append($"&user_id={query.Filter.UserId.Value}");
+            }
+
+            if (query.Filter.IssueId.HasValue)
+            {
+                urlBuilder.Append($"&issue_id={query.Filter.IssueId.Value}");
+            }
+
+            if (query.Filter.ProjectId.HasValue)
+            {
+                urlBuilder.Append($"&project_id={query.Filter.ProjectId.Value}");
+            }
+
+            if (query.Filter.ActivityId.HasValue)
+            {
+                urlBuilder.Append($"&activity_id={query.Filter.ActivityId.Value}");
+            }
+
             return await GetListAsync<TimeBooking>(new Uri(urlBuilder.ToString(), UriKind.Relative), token).ConfigureAwait(false);
         }
 
