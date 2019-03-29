@@ -32,6 +32,9 @@ namespace Develappers.RedmineHourglassApi
                     case NumberFilter nf:
                         filter += $"={nf.Value}";
                         break;
+                    default:
+                        // filter type not found
+                        continue;
                 }
 
                 filters.Add(filter);
