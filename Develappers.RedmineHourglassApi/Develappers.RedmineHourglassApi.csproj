@@ -18,6 +18,7 @@
     <Version>0.5.0-alpha</Version>
     <RepositoryUrl>https://github.com/DevelappersGmbH/RedmineHourglassNet.git</RepositoryUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

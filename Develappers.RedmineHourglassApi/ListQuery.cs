@@ -1,6 +1,6 @@
 ﻿namespace Develappers.RedmineHourglassApi
 {
-    public abstract class ListQuery<T> : BaseListQuery where T : IListFilter, new()
+    public abstract class ListQuery<T> : BaseListQuery where T : ListFilter, new()
     {
         protected ListQuery()
         {

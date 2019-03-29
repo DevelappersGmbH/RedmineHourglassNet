@@ -14,8 +14,12 @@ namespace Develappers.RedmineHourglassApi.Tests
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
             var query = new TimeBookingListQuery();
-            query.Filter.From = new DateTime(2018, 01, 01);
-            query.Filter.To = new DateTime(2018, 12, 31);
+            query.Filter.Start = new DateRangeFilter
+            {
+                From = new DateTime(2018, 01, 01),
+                To = new DateTime(2018, 12, 31)
+            };
+
             var bookings = await client.TimeBookings.GetListAsync(query);
         }
 

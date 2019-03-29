@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,32 +26,10 @@ namespace Develappers.RedmineHourglassApi
 
             var urlBuilder = new StringBuilder();
             urlBuilder.Append($"time_bookings.json?offset={query.Offset}&limit={query.Limit}");
-            
-            if (query.Filter.From.HasValue || query.Filter.To.HasValue)
+            var filterQuery = query.Filter.ToQueryString();
+            if (!string.IsNullOrEmpty(filterQuery))
             {
-                var from = DateTime.SpecifyKind(query.Filter.From.GetValueOrDefault(DateTime.MinValue), DateTimeKind.Utc);
-                var to = DateTime.SpecifyKind(query.Filter.To.GetValueOrDefault(DateTime.MaxValue), DateTimeKind.Utc);
-                urlBuilder.Append($"&date=><{from:yyyy-MM-dd}|{to:yyyy-MM-dd}");
-            }
-
-            if (query.Filter.UserId.HasValue)
-            {
-                urlBuilder.Append($"&user_id={query.Filter.UserId.Value}");
-            }
-
-            if (query.Filter.IssueId.HasValue)
-            {
-                urlBuilder.Append($"&issue_id={query.Filter.IssueId.Value}");
-            }
-
-            if (query.Filter.ProjectId.HasValue)
-            {
-                urlBuilder.Append($"&project_id={query.Filter.ProjectId.Value}");
-            }
-
-            if (query.Filter.ActivityId.HasValue)
-            {
-                urlBuilder.Append($"&activity_id={query.Filter.ActivityId.Value}");
+                urlBuilder.Append($"&{filterQuery}");
             }
 
             return await GetListAsync<TimeBooking>(new Uri(urlBuilder.ToString(), UriKind.Relative), token).ConfigureAwait(false);
