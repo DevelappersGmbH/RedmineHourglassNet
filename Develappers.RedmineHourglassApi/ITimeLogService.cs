@@ -11,10 +11,10 @@ namespace Develappers.RedmineHourglassApi
         /// <summary>
         /// Lists all visible time logs
         /// </summary>
-        /// <param name="filter">The filter options.</param>
+        /// <param name="query">The filter options.</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The paged list of results.</returns>
-        Task<PaginatedResult<TimeLog>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken));
+        Task<PaginatedResult<TimeLog>> GetListAsync(TimeLogListQuery query, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Retrieves a time log by it's id.

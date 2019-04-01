@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,14 +19,22 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<TimeTracker>> GetListAsync(BaseListFilter filter, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeTracker>> GetListAsync(TimeTrackerListQuery query, CancellationToken token = default(CancellationToken))
         {
-            if (filter == null)
+            if (query == null)
             {
-                throw new ArgumentNullException(nameof(filter));
+                throw new ArgumentNullException(nameof(query));
             }
 
-            return await GetListAsync<TimeTracker>(new Uri($"time_trackers.json?offset={filter.Offset}&limit={filter.Limit}", UriKind.Relative), token).ConfigureAwait(false);
+            var urlBuilder = new StringBuilder();
+            urlBuilder.Append($"time_trackers.json?offset={query.Offset}&limit={query.Limit}");
+            var filterQuery = query.Filter.ToQueryString();
+            if (!string.IsNullOrEmpty(filterQuery))
+            {
+                urlBuilder.Append($"&{filterQuery}");
+            }
+
+            return await GetListAsync<TimeTracker>(new Uri(urlBuilder.ToString(), UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

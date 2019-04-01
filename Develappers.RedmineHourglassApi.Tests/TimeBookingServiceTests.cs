@@ -1,7 +1,7 @@
+using Develappers.RedmineHourglassApi.Types;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Develappers.RedmineHourglassApi.Types;
 using Xunit;
 
 namespace Develappers.RedmineHourglassApi.Tests
@@ -11,9 +11,16 @@ namespace Develappers.RedmineHourglassApi.Tests
         [Fact]
         public async Task GetBookings()
         {
-           var config = Helpers.GetTestConfiguration();
-           var client = new HourglassClient(config);
-           var bookings =  await client.TimeBookings.GetListAsync(new BaseListFilter());
+            var config = Helpers.GetTestConfiguration();
+            var client = new HourglassClient(config);
+            var query = new TimeBookingListQuery();
+            query.Filter.Start = new DateRangeFilter
+            {
+                From = new DateTime(2018, 01, 01),
+                To = new DateTime(2018, 12, 31)
+            };
+
+            var bookings = await client.TimeBookings.GetListAsync(query);
         }
 
         [Fact]
@@ -37,7 +44,7 @@ namespace Develappers.RedmineHourglassApi.Tests
         {
             var config = Helpers.GetTestConfiguration();
             var client = new HourglassClient(config);
-            await client.TimeBookings.BulkDeleteAsync(new List<int>{3,4});
+            await client.TimeBookings.BulkDeleteAsync(new List<int> { 3, 4 });
         }
 
         [Fact]
