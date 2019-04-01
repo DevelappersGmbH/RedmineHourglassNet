@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Develappers.RedmineHourglassApi.Types;
 
-namespace Develappers.RedmineHourglassApi
+namespace Develappers.RedmineHourglassApi.Types
 {
     public abstract class ListFilter
     {

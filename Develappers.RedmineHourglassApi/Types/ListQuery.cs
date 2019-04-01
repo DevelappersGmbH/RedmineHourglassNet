@@ -1,4 +1,4 @@
-﻿namespace Develappers.RedmineHourglassApi
+﻿namespace Develappers.RedmineHourglassApi.Types
 {
     public abstract class ListQuery<T> : BaseListQuery where T : ListFilter, new()
     {

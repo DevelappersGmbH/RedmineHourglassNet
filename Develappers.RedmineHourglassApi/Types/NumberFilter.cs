@@ -1,4 +1,4 @@
-﻿namespace Develappers.RedmineHourglassApi
+﻿namespace Develappers.RedmineHourglassApi.Types
 {
     public class NumberFilter
     {

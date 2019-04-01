@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,14 +16,22 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<TimeLog>> GetListAsync(BaseListQuery query, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeLog>> GetListAsync(TimeLogListQuery query, CancellationToken token = default(CancellationToken))
         {
             if (query == null)
             {
                 throw new ArgumentNullException(nameof(query));
             }
 
-            return await GetListAsync<TimeLog>(new Uri($"time_logs.json?offset={query.Offset}&limit={query.Limit}", UriKind.Relative), token).ConfigureAwait(false);
+            var urlBuilder = new StringBuilder();
+            urlBuilder.Append($"time_logs.json?offset={query.Offset}&limit={query.Limit}");
+            var filterQuery = query.Filter.ToQueryString();
+            if (!string.IsNullOrEmpty(filterQuery))
+            {
+                urlBuilder.Append($"&{filterQuery}");
+            }
+
+            return await GetListAsync<TimeLog>(new Uri(urlBuilder.ToString(), UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

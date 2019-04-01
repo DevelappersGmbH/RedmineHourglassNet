@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Develappers.RedmineHourglassApi
+namespace Develappers.RedmineHourglassApi.Types
 {
     public class DateRangeFilter
     {
