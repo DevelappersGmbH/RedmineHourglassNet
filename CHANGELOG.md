@@ -17,6 +17,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - nothing
 
+## [1.0.0] - 2019-04-01
+### Added
+- time trackers: implemented filter for lists (breaking change!)
+- time bookings: implemented filter for lists (breaking change!)
+- time logs: implemented filter for lists (breaking change!)
+
+### Changed
+- nothing
+
+### Removed
+- nothing
+
+### Fixed
+- nothing
+
+## [0.4.0] - 2018-11-26
+### Added
+- error handling for bad request
+
+### Changed
+- nothing
+
+### Removed
+- nothing
+
+### Fixed
+- nothing
+
 ## [0.3.0] - 2018-11-23
 ### Added
 - time trackers: implemented bulk operations
