@@ -18,32 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - nothing
 
 ## [1.0.0] - 2019-04-01
-### Added
-- time trackers: implemented filter for lists (breaking change!)
-- time bookings: implemented filter for lists (breaking change!)
-- time logs: implemented filter for lists (breaking change!)
-
-### Changed
-- nothing
-
-### Removed
-- nothing
-
-### Fixed
-- nothing
+### Change
+- time trackers: implemented filter for lists (breaking change)
+- time bookings: implemented filter for lists (breaking change)
+- time logs: implemented filter for lists (breaking change)
 
 ## [0.4.0] - 2018-11-26
 ### Added
 - error handling for bad request
-
-### Changed
-- nothing
-
-### Removed
-- nothing
-
-### Fixed
-- nothing
 
 ## [0.3.0] - 2018-11-23
 ### Added
@@ -53,12 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - renamed properties for services in HourglassClient to be more convinient
-
-### Removed
-- nothing
-
-### Fixed
-- nothing
 
 ## [0.2.0] - 2018-11-23
 ### Added
@@ -71,7 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - renamed all service functions because "ById" is implicit clear
 - Get throws NotFoundException instead of returning null when item was not found 
-
 
 ## [0.0.2] - 2018-11-21
 ### Added
