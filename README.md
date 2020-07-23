@@ -12,7 +12,7 @@ This is an API client to access your Redmine Hourglass time trackings (see https
 
 ![GitHub Release Date](https://img.shields.io/github/release-date/DevelappersGmbH/RedmineHourglassNet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![NuGet](https://img.shields.io/nuget/dt/Develappers.RedmineHourglassNet.svg)](https://www.nuget.org/packages/Develappers.RedmineHourglassNet/)
+[![NuGet](https://img.shields.io/nuget/dt/Develappers.RedmineHourglassApi.svg)](https://www.nuget.org/packages/Develappers.RedmineHourglassApi/)
 
 
 
