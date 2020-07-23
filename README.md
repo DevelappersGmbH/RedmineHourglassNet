@@ -4,8 +4,17 @@ This is an API client to access your Redmine Hourglass time trackings (see https
 
 ## Status
 
-![Build status](https://travis-ci.org/DevelappersGmbH/RedmineHourglassNet.svg?branch=master)
-[![NuGet](https://img.shields.io/nuget/dt/Develappers.RedmineHourglassApi.svg)](https://www.nuget.org/packages/Develappers.RedmineHourglassApi/)
+![Build and Test](https://github.com/DevelappersGmbH/RedmineHourglassNet/workflows/build%20and%20test/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/DevelappersGmbH/RedmineHourglassNet/badge.svg?branch=master)](https://coveralls.io/github/RedmineHourglassNet/RedmineHourglassNet?branch=master)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/DevelappersGmbH/RedmineHourglassNet)
+
+![GitHub issues](https://img.shields.io/github/issues/DevelappersGmbH/RedmineHourglassNet)
+
+![GitHub Release Date](https://img.shields.io/github/release-date/DevelappersGmbH/RedmineHourglassNet)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NuGet](https://img.shields.io/nuget/dt/Develappers.RedmineHourglassNet.svg)](https://www.nuget.org/packages/Develappers.RedmineHourglassNet/)
+
+
 
 ## Usage
 
