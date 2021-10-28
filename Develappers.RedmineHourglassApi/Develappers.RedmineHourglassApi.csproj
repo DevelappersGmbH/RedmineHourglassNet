@@ -13,12 +13,14 @@
     <PackageTags>redmine redmine-hourglass timetracking</PackageTags>
     <PackageProjectUrl>https://github.com/DevelappersGmbH/RedmineHourglassNet</PackageProjectUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/DevelappersGmbH/RedmineHourglassNet/master/icon.png</PackageIconUrl>
-    <Version>1.1.0-alpha</Version>
+    <Version>1.1.0</Version>
     <RepositoryUrl>https://github.com/DevelappersGmbH/RedmineHourglassNet.git</RepositoryUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
     <LangVersion>default</LangVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
