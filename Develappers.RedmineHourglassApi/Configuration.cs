@@ -24,5 +24,10 @@ namespace Develappers.RedmineHourglassApi
         /// The api key.
         /// </summary>
         public string ApiKey { get; set; }
+
+        public Configuration DeepClone()
+        {
+            return new Configuration(RedmineUrl, ApiKey);
+        }
     }
 }
