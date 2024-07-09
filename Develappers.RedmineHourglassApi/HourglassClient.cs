@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Develappers.RedmineHourglassApi
 {
@@ -7,8 +9,12 @@ namespace Develappers.RedmineHourglassApi
     /// </summary>
     public class HourglassClient
     {
-        public HourglassClient(Configuration configuration)
+        private readonly ILogger _logger;
+
+        public HourglassClient(Configuration configuration, ILogger logger = null)
         {
+            _logger = logger ?? NullLogger.Instance;
+
             if (configuration == null)
             {
                 throw new ArgumentNullException(nameof(configuration));
@@ -26,9 +32,9 @@ namespace Develappers.RedmineHourglassApi
 
             // clone the configuration to ensure afterwards changes don't take any effect
             var config = configuration.DeepClone();
-            TimeBookings = new TimeBookingService(config);
-            TimeLogs = new TimeLogService(config);
-            TimeTrackers = new TimeTrackerService(config);
+            TimeBookings = new TimeBookingService(config, _logger);
+            TimeLogs = new TimeLogService(config, _logger);
+            TimeTrackers = new TimeTrackerService(config, _logger);
         }
 
 

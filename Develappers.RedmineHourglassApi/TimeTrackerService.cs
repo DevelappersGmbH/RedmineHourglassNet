@@ -1,5 +1,4 @@
-﻿using Develappers.RedmineHourglassApi.Logging;
-using Develappers.RedmineHourglassApi.Types;
+﻿using Develappers.RedmineHourglassApi.Types;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,18 +7,19 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Develappers.RedmineHourglassApi
 {
     public class TimeTrackerService : BaseService, ITimeTrackerService
     {
         /// <inheritdoc />
-        internal TimeTrackerService(Configuration configuration) : base(configuration)
+        internal TimeTrackerService(Configuration configuration, ILogger logger) : base(configuration, logger)
         {
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedResult<TimeTracker>> GetListAsync(TimeTrackerListQuery query, CancellationToken token = default(CancellationToken))
+        public async Task<PaginatedResult<TimeTracker>> GetListAsync(TimeTrackerListQuery query, CancellationToken token = default)
         {
             if (query == null)
             {
@@ -38,7 +38,7 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
-        public async Task<TimeTracker> StartAsync(TimeTrackerStartOptions value, CancellationToken token = default(CancellationToken))
+        public async Task<TimeTracker> StartAsync(TimeTrackerStartOptions value, CancellationToken token = default)
         {
             if (value == null)
             {
@@ -61,7 +61,7 @@ namespace Develappers.RedmineHourglassApi
                 if (error != null)
                 {
                     // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    Logger.LogInformation($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
                     throw new ArgumentException(string.Join("\r\n", error.Message), nameof(value), wex);
                 }
 
@@ -71,25 +71,25 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
             {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
+                Logger.LogInformation("Web exception [Unauthorized] occurred.", wex);
                 throw new AuthenticationException("Missing or invalid authentication information.", wex);
             }
             catch (WebException wex)
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
             {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
+                Logger.LogDebug("Web exception [Forbidden] occurred.", wex);
                 throw new AuthorizationException("Not authorized to access this resource.", wex);
             }
             catch (Exception ex)
             {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                Logger.LogError($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
 
         /// <inheritdoc />
-        public async Task<TimeLog> StopAsync(int id, CancellationToken token = default(CancellationToken))
+        public async Task<TimeLog> StopAsync(int id, CancellationToken token = default)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace Develappers.RedmineHourglassApi
                 if (error != null)
                 {
                     // successfully deserialized an error object
-                    LogProvider.GetCurrentClassLogger().InfoException($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
+                    Logger.LogInformation($"Exception {wex} occurred - will be rethrown as ArgumentException", wex);
                     throw new ArgumentException(string.Join("\r\n", error.Message), nameof(id), wex);
                 }
 
@@ -122,37 +122,37 @@ namespace Develappers.RedmineHourglassApi
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Unauthorized)
             {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Unauthorized] occurred.", wex);
+                Logger.LogDebug("Web exception [Unauthorized] occurred.", wex);
                 throw new AuthenticationException("Missing or invalid authentication information.", wex);
             }
             catch (WebException wex)
                 when (wex.Status == WebExceptionStatus.ProtocolError &&
                       (wex.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
             {
-                LogProvider.GetCurrentClassLogger().DebugException("Web exception [Forbidden] occurred.", wex);
+                Logger.LogDebug("Web exception [Forbidden] occurred.", wex);
                 throw new AuthorizationException("Not authorized to access this resource.", wex);
             }
             catch (Exception ex)
             {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                Logger.LogError($"unexpected exception {ex} occurred", ex);
                 throw;
             }
         }
 
         /// <inheritdoc />
-        public async Task<TimeTracker> GetAsync(int id, CancellationToken token = default(CancellationToken))
+        public async Task<TimeTracker> GetAsync(int id, CancellationToken token = default)
         {
             return await GetAsync<TimeTracker>(new Uri($"time_trackers/{id}.json", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task DeleteAsync(int id, CancellationToken token = default(CancellationToken))
+        public async Task DeleteAsync(int id, CancellationToken token = default)
         {
             await DeleteAsync(new Uri($"time_trackers/{id}.json", UriKind.Relative), token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task UpdateAsync(int id, TimeTrackerUpdate values, CancellationToken token = default(CancellationToken))
+        public async Task UpdateAsync(int id, TimeTrackerUpdate values, CancellationToken token = default)
         {
             if (values == null)
             {
@@ -163,7 +163,7 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
-        public async Task BulkUpdateAsync(List<TimeTrackerBulkUpdate> values, CancellationToken token = default(CancellationToken))
+        public async Task BulkUpdateAsync(List<TimeTrackerBulkUpdate> values, CancellationToken token = default)
         {
             if (values == null)
             {
@@ -182,7 +182,7 @@ namespace Develappers.RedmineHourglassApi
         }
 
         /// <inheritdoc />
-        public async Task BulkDeleteAsync(List<int> ids, CancellationToken token = default(CancellationToken))
+        public async Task BulkDeleteAsync(List<int> ids, CancellationToken token = default)
         {
             if (ids == null)
             {

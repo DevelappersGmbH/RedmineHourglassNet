@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Develappers.RedmineHourglassApi
 {
     public class TimeLogService : BaseService, ITimeLogService
     {
         /// <inheritdoc />
-        internal TimeLogService(Configuration configuration) : base(configuration)
+        internal TimeLogService(Configuration configuration, ILogger logger) : base(configuration, logger)
         {
         }
 

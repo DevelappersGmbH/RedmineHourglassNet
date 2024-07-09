@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using Develappers.RedmineHourglassApi.Logging;
 using Develappers.RedmineHourglassApi.Types;
 using Newtonsoft.Json;
 
@@ -37,7 +36,7 @@ namespace Develappers.RedmineHourglassApi
             }
             catch (Exception ex)
             {
-                LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
+                // LogProvider.GetCurrentClassLogger().ErrorException($"unexpected exception {ex} occurred", ex);
                 return null;
             }
         }
