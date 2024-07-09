@@ -1,6 +1,3 @@
-﻿namespace Develappers.RedmineHourglassApi.Types
-{
-    public class TimeBookingListQuery : ListQuery<TimeBookingListFilter>
-    {
-    }
-}
+﻿namespace Develappers.RedmineHourglassApi.Types;
+
+public class TimeBookingListQuery : ListQuery<TimeBookingListFilter>;

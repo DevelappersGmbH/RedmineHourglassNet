@@ -1,7 +1,6 @@
-﻿namespace Develappers.RedmineHourglassApi
+﻿namespace Develappers.RedmineHourglassApi;
+
+internal class Constants
 {
-    internal class Constants
-    {
-        public const string HourglassRelativeUrl = "hourglass/";
-    }
+    public const string HourglassRelativeUrl = "hourglass/";
 }

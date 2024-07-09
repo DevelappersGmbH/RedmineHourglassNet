@@ -9,11 +9,9 @@ namespace Develappers.RedmineHourglassApi
     /// </summary>
     public class HourglassClient
     {
-        private readonly ILogger _logger;
-
         public HourglassClient(Configuration configuration, ILogger logger = null)
         {
-            _logger = logger ?? NullLogger.Instance;
+            logger ??= NullLogger.Instance;
 
             if (configuration == null)
             {
@@ -30,11 +28,11 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentException("invalid api key", nameof(configuration));
             }
 
-            // clone the configuration to ensure afterwards changes don't take any effect
+            // clone the configuration to ensure later changes don't take any effect
             var config = configuration.DeepClone();
-            TimeBookings = new TimeBookingService(config, _logger);
-            TimeLogs = new TimeLogService(config, _logger);
-            TimeTrackers = new TimeTrackerService(config, _logger);
+            TimeBookings = new TimeBookingService(config, logger);
+            TimeLogs = new TimeLogService(config, logger);
+            TimeTrackers = new TimeTrackerService(config, logger);
         }
 
 

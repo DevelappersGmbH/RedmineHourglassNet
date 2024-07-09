@@ -1,7 +1,6 @@
-﻿namespace Develappers.RedmineHourglassApi.Types
+﻿namespace Develappers.RedmineHourglassApi.Types;
+
+public class NumberFilter
 {
-    public class NumberFilter
-    {
-        public int Value { get; set; }
-    }
+    public int Value { get; set; }
 }

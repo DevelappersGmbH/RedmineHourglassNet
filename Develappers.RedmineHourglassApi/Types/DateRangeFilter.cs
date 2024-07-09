@@ -1,16 +1,9 @@
 ﻿using System;
 
-namespace Develappers.RedmineHourglassApi.Types
-{
-    public class DateRangeFilter
-    {
-        public DateRangeFilter()
-        {
-            From = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
-            To = DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc);
-        }
+namespace Develappers.RedmineHourglassApi.Types;
 
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
-    }
+public class DateRangeFilter
+{
+    public DateTime From { get; set; } = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+    public DateTime To { get; set; } = DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc);
 }
