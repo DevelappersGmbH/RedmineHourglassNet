@@ -1,8 +1,7 @@
-﻿namespace Develappers.RedmineHourglassApi.Types
+﻿namespace Develappers.RedmineHourglassApi.Types;
+
+public class BaseListQuery
 {
-    public class BaseListQuery
-    {
-        public int Offset { get; set; } = 0;
-        public int Limit { get; set; } = 25;
-    }
+    public int Offset { get; set; } = 0;
+    public int Limit { get; set; } = 25;
 }

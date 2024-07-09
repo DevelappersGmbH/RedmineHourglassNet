@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Develappers.RedmineHourglassApi
+namespace Develappers.RedmineHourglassApi;
+
+public class AuthenticationException : Exception
 {
-    public class AuthenticationException : Exception
+    public AuthenticationException()
     {
-        public AuthenticationException()
-        {
-        }
+    }
 
-        public AuthenticationException(string message) : base(message)
-        {
-        }
+    public AuthenticationException(string message) : base(message)
+    {
+    }
 
-        public AuthenticationException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+    public AuthenticationException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 
-        protected AuthenticationException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+    protected AuthenticationException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
     }
 }

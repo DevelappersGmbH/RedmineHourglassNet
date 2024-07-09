@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Develappers.RedmineHourglassApi.Types
+namespace Develappers.RedmineHourglassApi.Types;
+
+/// <summary>
+/// Class which wraps a <see cref="TimeBookingBulkCreate"/> object to be API conform.
+/// </summary>
+internal class TimeBookingBulkCreateRequest
 {
-    /// <summary>
-    /// Class which wraps a <see cref="TimeBookingBulkCreate"/> object to be API conform.
-    /// </summary>
-    internal class TimeBookingBulkCreateRequest
-    {
-        [JsonProperty("time_bookings")]
-        public List<TimeBookingBulkCreate> Values { get; set; }
-    }
+    [JsonProperty("time_bookings")]
+    public List<TimeBookingBulkCreate> Values { get; set; }
 }

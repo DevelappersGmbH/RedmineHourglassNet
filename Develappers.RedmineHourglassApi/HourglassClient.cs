@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Develappers.RedmineHourglassApi
 {
@@ -7,8 +9,10 @@ namespace Develappers.RedmineHourglassApi
     /// </summary>
     public class HourglassClient
     {
-        public HourglassClient(Configuration configuration)
+        public HourglassClient(Configuration configuration, ILogger logger = null)
         {
+            logger ??= NullLogger.Instance;
+
             if (configuration == null)
             {
                 throw new ArgumentNullException(nameof(configuration));
@@ -24,11 +28,11 @@ namespace Develappers.RedmineHourglassApi
                 throw new ArgumentException("invalid api key", nameof(configuration));
             }
 
-            // clone the configuration to ensure afterwards changes don't take any effect
+            // clone the configuration to ensure later changes don't take any effect
             var config = configuration.DeepClone();
-            TimeBookings = new TimeBookingService(config);
-            TimeLogs = new TimeLogService(config);
-            TimeTrackers = new TimeTrackerService(config);
+            TimeBookings = new TimeBookingService(config, logger);
+            TimeLogs = new TimeLogService(config, logger);
+            TimeTrackers = new TimeTrackerService(config, logger);
         }
 
 

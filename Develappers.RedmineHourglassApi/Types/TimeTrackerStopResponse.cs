@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Develappers.RedmineHourglassApi.Types
+namespace Develappers.RedmineHourglassApi.Types;
+
+internal class TimeTrackerStopResponse
 {
-    internal class TimeTrackerStopResponse
-    {
-        [JsonProperty("time_log")]
-        public TimeLog TimeLog { get; set; }
-    }
+    [JsonProperty("time_log")]
+    public TimeLog TimeLog { get; set; }
 }

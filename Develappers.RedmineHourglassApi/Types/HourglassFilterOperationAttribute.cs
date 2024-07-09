@@ -1,15 +1,9 @@
 ﻿using System;
 
-namespace Develappers.RedmineHourglassApi.Types
-{
-    [AttributeUsage(AttributeTargets.Property)]
-    internal class HourglassFilterOperationAttribute : Attribute
-    {
-        public HourglassFilterOperationAttribute(string fieldName)
-        {
-            FieldName = fieldName;
-        }
+namespace Develappers.RedmineHourglassApi.Types;
 
-        public string FieldName { get; }   
-    }
+[AttributeUsage(AttributeTargets.Property)]
+internal class HourglassFilterOperationAttribute(string fieldName) : Attribute
+{
+    public string FieldName { get; } = fieldName;
 }
