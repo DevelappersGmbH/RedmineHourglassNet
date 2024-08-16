@@ -26,7 +26,7 @@ jobs:
     - name: Generate coverage report
       run: dotnet test --filter Category=UnitTest --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
     - name: Pack NuGet-Package
-      run: dotnet pack --configuration Release --no-restore
+      run: dotnet pack --configuration Release --no-restore --no-build
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@v1.0.1    
 
