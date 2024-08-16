@@ -27,9 +27,13 @@ jobs:
       run: dotnet test --filter Category=UnitTest --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
     - name: Pack NuGet-Package
       run: dotnet pack --configuration Release --no-restore --no-build
+    - name: Upload NuGet-Package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: package/*.nupkg
     - name: Publish coverage report to coveralls.io
-      uses: coverallsapp/github-action@v1.0.1    
-
+      uses: coverallsapp/github-action@v1.0.1   
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ./Develappers.RedmineHourglassApi.Tests/TestResults/coverage.info  
