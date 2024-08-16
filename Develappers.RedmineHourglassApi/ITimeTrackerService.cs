@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Develappers.RedmineHourglassApi.Types;
+﻿using Develappers.RedmineHourglassApi.Types;
 
 namespace Develappers.RedmineHourglassApi;
 

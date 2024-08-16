@@ -1,10 +1,5 @@
 ﻿using Develappers.RedmineHourglassApi.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace Develappers.RedmineHourglassApi;
@@ -143,11 +138,6 @@ public class TimeLogService : BaseService, ITimeLogService
     /// <inheritdoc />
     public async Task BulkBookAsync(List<TimeBookingBulkUpdate> values, CancellationToken token = default)
     {
-        if (values == null)
-        {
-            throw new ArgumentNullException(nameof(values));
-        }
-
         if (values == null)
         {
             throw new ArgumentNullException(nameof(values));
