@@ -2,9 +2,9 @@ name: build and test
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Restore
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
@@ -24,8 +25,11 @@ jobs:
       run: dotnet test --filter Category=UnitTest --no-restore --verbosity normal
     - name: Generate coverage report
       run: dotnet test --filter Category=UnitTest --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+    - name: Pack NuGet-Package
+      run: dotnet pack --configuration Release --no-restore --no-build
     - name: Publish coverage report to coveralls.io
-      uses: coverallsapp/github-action@v1.0.1
+      uses: coverallsapp/github-action@v1.0.1    
+
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ./Develappers.RedmineHourglassApi.Tests/TestResults/coverage.info  
