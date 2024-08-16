@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Develappers.RedmineHourglassApi
@@ -9,7 +8,7 @@ namespace Develappers.RedmineHourglassApi
     /// </summary>
     public class HourglassClient
     {
-        public HourglassClient(Configuration configuration, ILogger logger = null)
+        public HourglassClient(Configuration configuration, ILogger? logger = null)
         {
             logger ??= NullLogger.Instance;
 
