@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Develappers.RedmineHourglassApi
 {
@@ -9,6 +9,7 @@ namespace Develappers.RedmineHourglassApi
         {
         }
 
+        [SetsRequiredMembers]
         public Configuration(string redmineUrl, string apiKey)
         {
             RedmineUrl = redmineUrl;
@@ -18,12 +19,12 @@ namespace Develappers.RedmineHourglassApi
         /// <summary>
         /// The redmine installation url.
         /// </summary>
-        public string RedmineUrl { get; set; }
+        public required string RedmineUrl { get; set; }
 
         /// <summary>
         /// The api key.
         /// </summary>
-        public string ApiKey { get; set; }
+        public required string ApiKey { get; set; }
 
         internal Configuration DeepClone()
         {

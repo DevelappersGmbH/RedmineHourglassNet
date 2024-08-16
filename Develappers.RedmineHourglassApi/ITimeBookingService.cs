@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Develappers.RedmineHourglassApi.Types;
+﻿using Develappers.RedmineHourglassApi.Types;
 
 namespace Develappers.RedmineHourglassApi;
 
@@ -16,7 +13,7 @@ public interface ITimeBookingService
     Task<PaginatedResult<TimeBooking>> GetListAsync(TimeBookingListQuery query, CancellationToken token = default);
 
     /// <summary>
-    /// Retrieves a time booking by it's id.
+    /// Retrieves a time booking by its id.
     /// </summary>
     /// <param name="id">The id of the time booking.</param>
     /// <param name="token">The cancellation token.</param>
