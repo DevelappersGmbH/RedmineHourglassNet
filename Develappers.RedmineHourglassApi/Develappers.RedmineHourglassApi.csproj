@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <AssemblyName>Develappers.RedmineHourglassApi</AssemblyName>
     <RootNamespace>Develappers.RedmineHourglassApi</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,12 +17,12 @@
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/DevelappersGmbH/RedmineHourglassNet/master/icon.png</PackageIconUrl>
-    <Version>1.3.0-alpha</Version>
+    <Version>2.0.0-alpha</Version>
     <RepositoryUrl>https://github.com/DevelappersGmbH/RedmineHourglassNet.git</RepositoryUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
     <LangVersion>default</LangVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,9 +30,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
