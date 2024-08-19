@@ -17,12 +17,12 @@
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/DevelappersGmbH/RedmineHourglassNet/master/icon.png</PackageIconUrl>
-    <Version>2.0.0</Version>
+    <Version>2.1.0-alpha</Version>
     <RepositoryUrl>https://github.com/DevelappersGmbH/RedmineHourglassNet.git</RepositoryUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
     <LangVersion>default</LangVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
