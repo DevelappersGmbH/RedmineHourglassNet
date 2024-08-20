@@ -34,13 +34,12 @@ jobs:
     - name: Pack NuGet-Package
       run: dotnet pack --configuration Release --no-restore --no-build --output nupkgs
 
-      - name: Get NuGet-Package Name
-        id: get_package_name
-        shell: bash
-        run: |
-          PACKAGE_NAME=$(ls nupkgs/*.nupkg)
-          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
-
+    - name: Get NuGet-Package Name
+      id: get_package_name
+      shell: bash
+      run: |
+        PACKAGE_NAME=$(ls nupkgs/*.nupkg)
+        echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
 
     - name: Upload NuGet-Package
       uses: actions/upload-artifact@v4
