@@ -34,11 +34,15 @@ jobs:
     - name: Pack NuGet-Package
       run: dotnet pack --configuration Release --no-restore --no-build --output nupkgs
 
+    - name: Get NuGet-Package Name
+      shell: bash
+      run: PACKAGE_NAME=$(ls nupkgs/*.nupkg)
+
     - name: Upload NuGet-Package
       uses: actions/upload-artifact@v4
       with:
-        name: nuget-package
-        path: /home/runner/work/RedmineHourglassNet/RedmineHourglassNet/nupkgs/Develappers.RedmineHourglassApi.2.0.0-alpha.nupkg
+        name: ${{ env.PACKAGE_NAME }}
+        path: /home/runner/work/RedmineHourglassNet/RedmineHourglassNet/nupkgs/${{ env.PACKAGE_NAME }}
 
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@v1.0.1   
