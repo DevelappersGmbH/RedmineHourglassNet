@@ -32,17 +32,15 @@ jobs:
       run: dotnet test --filter Category=UnitTest --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
 
     - name: Pack NuGet-Package
-      run: dotnet pack --configuration Release --no-restore --no-build --output nupkgs
-
-    - name: Get NuGet-Package Name
-      shell: bash
-      run: PACKAGE_NAME=$(ls nupkgs/*.nupkg)
+      run: |
+        dotnet pack --configuration Release --no-restore --no-build --output nupkgs
+        echo "::set-output name=package_name::$(ls nupkgs/*.nupkg)"
 
     - name: Upload NuGet-Package
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.PACKAGE_NAME }}
-        path: /home/runner/work/RedmineHourglassNet/RedmineHourglassNet/nupkgs/${{ env.PACKAGE_NAME }}
+        name: ${{ steps.pack.outputs.package_name }}
+        path: /home/runner/work/RedmineHourglassNet/RedmineHourglassNet/nupkgs/${{ steps.pack.outputs.package_name }}
 
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@v1.0.1   
